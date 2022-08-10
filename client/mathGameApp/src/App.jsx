@@ -6,11 +6,6 @@ import ChoiceScreen from "./components/ChoiceScreen";
 //this will need to be moved to quizcomponent?
 //whichever component generates the quiz pages
 function App() {
-  const [allQuestions, setAllQuestions] = useState({
-    num1: 0,
-    num2: 0,
-    answer: 0,
-  });
   return (
     <div className="app">
       <Home />

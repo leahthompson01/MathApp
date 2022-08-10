@@ -4,7 +4,10 @@ import { v4 as uuid } from "uuid";
 export default function Addition() {
   const [questions, setQuestions] = useState([]);
   const [index, setIndex] = useState(0);
+  const [score, setScore] = useState(0);
   function makeQuestions() {
+    // need to update this data to come from
+    //my API
     for (let i = 1; i <= 10; i++) {
       let rand1 = Math.floor(Math.random() * 100);
       let rand2 = Math.floor(Math.random() * 100);
@@ -51,6 +54,13 @@ export default function Addition() {
       }
     });
   }
+  function selectAnswer(event) {
+    console.log(event.target.innerText);
+    const value = event.target.innerText;
+    if (value == questions[index].rightAnswer) {
+      setScore((prevScore) => prevScore + 1);
+    }
+  }
 
   return (
     <section>
@@ -58,12 +68,13 @@ export default function Addition() {
         <div className="questionsContainer">
           <button onClick={decreaseIndex}>Previous Question</button>
           <section className="middleContainer">
+            <p className="score">Your current Score is {score}</p>
             <h2>{questions[index].question}</h2>
             <section className="answerChoices">
               {Object.keys(questions[index].answerChoices)
                 .sort((a, b) => a - b)
                 .map((answerOptions) => (
-                  <p key={uuid()}>
+                  <p key={uuid()} onClick={selectAnswer}>
                     {questions[index].answerChoices[answerOptions]}
                   </p>
                 ))}
