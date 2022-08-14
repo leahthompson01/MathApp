@@ -1,3 +1,7 @@
+:root {
+  --main-bg-color: #395b64;
+  --main-font-color: #c1dbe3;
+}
 html,
 body,
 body > div,
@@ -5,44 +9,96 @@ body > div,
 .optionsPage {
   padding: 0;
   margin: 0;
-  background-color: #395b64;
+  background-color: var(--main-bg-color);
   height: 100%;
   max-height: 100vh;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 /* when internet comes back look up how to make vars
 for css */
+.navbar {
+  /* margin-top: 3%; */
+  padding: 0.2rem;
+  background-color: rgb(19, 19, 19);
+  border-bottom: 2px solid #312f2f;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.4);
+  color: var(--main-font-color);
+  max-height: 2.3rem;
+  padding-bottom: 0.4rem;
+  font-size: 14px;
+}
+.navbar ul {
+  /* margin: 0;
+  padding: 0; */
+  display: flex;
+  justify-content: space-around;
+  list-style: none;
+  align-items: center;
+  height: 1.5rem;
+}
+.navbar li {
+  width: 15%;
+}
+.navbar ul a:hover {
+  color: #d7907b;
+}
+.navbar a:visited {
+  color: var(--main-font-color);
+}
+
 .home {
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   text-align: center;
   display: flex;
   flex-direction: column;
+  background-color: rgba(19.2, 18.4, 18.4, 0.7);
+  min-height: 80%;
+  width: 80%;
+  margin: 0 auto;
+  margin-top: 1rem;
   justify-content: center;
-  /* align-items: center; */
-  min-height: 100vh;
-  color: #0d0e0e;
+  align-content: center;
+  box-shadow: -1em 0 0.4em #c1dbe3, 1em 0 0.4em #c1dbe3;
+  color: var(--main-font-color);
+}
+.home h1 {
+  font-size: 1.7rem;
 }
 .home h2 {
-  font-size: 22px;
+  font-size: 1.2rem;
+  color: #d7907b;
 }
 .home button {
   border-radius: 17px;
   padding: 0.5rem;
-  background-color: #a5c9ca;
-  border-color: #12272d;
+  background-color: var(--main-font-color);
+  border: 3px solid var(--main-bg-color);
+  color: #e5625e;
   font-size: 13px;
   font-weight: 600;
 }
 .home button:hover {
-  background-color: #53898c;
+  background-color: #e5625e;
   color: white;
-  border-color: white;
+  border-color: var(--main-font-color);
+}
+.mainLogo {
+  width: 50%;
+  /* padding: 0;
+  margin: 0; */
+  /* margin: 0 auto; */
 }
 .optionsPage {
   color: white;
   text-align: center;
   display: flex;
   flex-direction: column;
+  background-color: rgba(19.2, 18.4, 18.4, 0.7);
+  width: 80%;
+  margin: 1rem auto;
+  height: 30rem;
+  box-shadow: -1em 0 0.4em #c1dbe3, 1em 0 0.4em #c1dbe3;
+
   /* justify-content: space-around; */
 }
 .options {
@@ -50,6 +106,7 @@ for css */
   align-self: center;
   display: grid;
   /* padding: 7rem 18rem; */
+
   grid-template-columns: repeat(2, 2fr);
   grid-template-rows: repeat(2, 100px);
   grid-gap: 2rem;
@@ -94,4 +151,18 @@ for css */
   /* display: flex; */
   margin-left: 45%;
   margin-top: 4rem;
+}
+.indivAnswerOption {
+  background-color: black;
+  height: 4rem;
+  width: 6rem;
+  border-radius: 5px;
+  text-align: center;
+  padding-top: 1rem;
+}
+.rightAnswer {
+  background-color: green;
+}
+.wrongAnswer {
+  background-color: red;
 }
