@@ -13,7 +13,7 @@ export default function Navbar() {
           ></img>
         </li>
         <li>
-          <Link to="/">Home</Link>
+          <Link to="/MathApp/">Home</Link>
         </li>
         <li>Contact</li>
         <li>MultiPlayer</li>

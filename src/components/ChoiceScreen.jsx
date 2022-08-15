@@ -10,7 +10,6 @@ export default function ChoiceScreen() {
   // }
   return (
     <>
-      <Navbar />
       <div className="optionsPage">
         <h2>Choose What Topic You Want to Be Quizzed On</h2>
         <section className="options">

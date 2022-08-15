@@ -79,7 +79,6 @@ export default function GenerateQuiz() {
   // console.log(questions[0]);
   return (
     <>
-      <Navbar />
       <section>
         <div className="questionsContainer">
           <button onClick={decreaseIndex}>Previous Question</button>
