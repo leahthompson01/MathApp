@@ -15,8 +15,8 @@ function App() {
       {/* <Home /> */}
       <Routes>
         <Route path="/MathApp" element={<Home />} />
-        <Route path="/choiceScreen" element={<ChoiceScreen />} />
-        <Route path="/quiz" element={<GenerateQuiz />} />
+        <Route path="/MathApp/choiceScreen" element={<ChoiceScreen />} />
+        <Route path="/MathApp/quiz" element={<GenerateQuiz />} />
       </Routes>
     </div>
   );

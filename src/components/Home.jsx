@@ -16,7 +16,7 @@ export default function Home() {
         A site to improve your math skills, with both single and multiplayer
         quizzes
       </p>
-      <Link to="/ChoiceScreen">{<button>Get Started</button>}</Link>
+      <Link to="/MathApp/ChoiceScreen">{<button>Get Started</button>}</Link>
     </div>
   );
 }

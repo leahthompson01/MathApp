@@ -17,14 +17,26 @@ export default function GenerateQuiz() {
   const [isSubmitted, setSubmitted] = useState(false);
   const [indexCorrectAnswers, setIndexCorrectAnswers] = useState([]);
   useEffect(() => {
-    console.log("plz world");
-    fetch(
-      "https://cryptic-brook-96547.herokuapp.com/quiz?operation=" + operation
-    )
-      .then((response) => response.json())
-      .then((data) => setQuestions(data))
-      .catch((err) => console.error(err));
+    async function getQuestionData() {
+      try {
+        const response = await fetch(
+          "https://cryptic-brook-96547.herokuapp.com/quiz?operation=" +
+            operation
+        );
+        const data = await response.json();
+        setQuestions(data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    // fetch(
+    //   "https://cryptic-brook-96547.herokuapp.com/quiz?operation=" + operation
+    // )
+    //   .then((response) => response.json())
+    //   .then((data) => setQuestions(data))
+    //   .catch((err) => console.error(err));
     // setQuestions(data);
+    getQuestionData();
   }, []);
 
   // console.log(questions);
@@ -48,18 +60,19 @@ export default function GenerateQuiz() {
     });
   }
   function selectAnswer(event) {
-    console.log(event.target.innerText);
-    const value = event.target.innerText;
-    // let indx = index
-    setAnswers((prevObj) => {
+    if (!isSubmitted) {
+      const value = event.target.innerText;
       // let indx = index
-      prevObj[index] = value;
-      return {
-        ...prevObj,
-      };
-    });
+      setAnswers((prevObj) => {
+        // let indx = index
+        prevObj[index] = value;
+        return {
+          ...prevObj,
+        };
+      });
+    }
   }
-  console.log(answers);
+
   function submitQuiz() {
     setSubmitted(true);
     let count = 0;
@@ -79,40 +92,89 @@ export default function GenerateQuiz() {
   // console.log(questions[0]);
   return (
     <>
-      <section>
-        <div className="questionsContainer">
-          <button onClick={decreaseIndex}>Previous Question</button>
-          <section className="middleContainer">
+      <section className="quizPage">
+        {questions.length <= 1 ? (
+          <img
+            className="loadingGif"
+            src="https://media.giphy.com/media/3o7bu3XilJ5BOiSGic/giphy.gif"
+          ></img>
+        ) : (
+          <div className="questionsContainer">
             {isSubmitted && <p className="score">Your Score is {score}</p>}
             <h2>{questions[index].question}</h2>
-            <section className="answerChoices">
-              {Object.keys(questions[index].answerChoices)
-                .sort(
-                  (a, b) =>
-                    questions[index].answerChoices[a] -
-                    questions[index].answerChoices[b]
-                )
-                .map((answerOptions) => (
-                  <p
-                    key={uuid()}
-                    onClick={selectAnswer}
-                    className={
-                      isSubmitted
-                        ? questions[index].answerChoices[answerOptions] ==
-                          questions[index].rightAnswer
-                          ? "rightAnswer indivAnswerOption"
-                          : "wrongAnswer indivAnswerOption"
-                        : "indivAnswerOption"
-                    }
-                  >
-                    {questions[index].answerChoices[answerOptions]}
-                  </p>
-                ))}
+
+            <section className="middleContainer">
+              {index > 0 ? (
+                <img
+                  onClick={decreaseIndex}
+                  src="src/assets/icons8-back-64.png"
+                ></img>
+              ) : (
+                <img
+                  className="hidden"
+                  onClick={decreaseIndex}
+                  src="src/assets/icons8-back-64.png"
+                ></img>
+              )}
+              <section className="answerChoices">
+                {Object.keys(questions[index].answerChoices)
+                  .sort(
+                    (a, b) =>
+                      questions[index].answerChoices[a] -
+                      questions[index].answerChoices[b]
+                  )
+                  .map((answerOptions) => (
+                    <p
+                      key={uuid()}
+                      onClick={selectAnswer}
+                      className={
+                        answers[index] ==
+                        questions[index].answerChoices[answerOptions]
+                          ? isSubmitted
+                            ? questions[index].answerChoices[answerOptions] ==
+                              questions[index].rightAnswer
+                              ? "rightAnswer selectedAnswer indivAnswerOption"
+                              : "wrongAnswer selectedAnswer indivAnswerOption"
+                            : "indivAnswerOption selectedAnswer nonSubmitted"
+                          : isSubmitted
+                          ? questions[index].answerChoices[answerOptions] ==
+                            questions[index].rightAnswer
+                            ? "rightAnswer indivAnswerOption"
+                            : "wrongAnswer indivAnswerOption"
+                          : "indivAnswerOption"
+                      }
+                    >
+                      {questions[index].answerChoices[answerOptions]}
+                      {isSubmitted &&
+                        answers[index] ==
+                          questions[index].answerChoices[answerOptions] && (
+                          <p className="selectedText">You picked</p>
+                        )}
+                    </p>
+                  ))}
+              </section>
+              {index < questions.length - 1 ? (
+                <img
+                  onClick={increaseIndex}
+                  src="src/assets/icons8-forward-64.png"
+                ></img>
+              ) : (
+                <img
+                  className="hidden"
+                  onClick={increaseIndex}
+                  src="src/assets/icons8-forward-64.png"
+                ></img>
+              )}
             </section>
-          </section>
-          <button onClick={increaseIndex}>Next Question</button>
-        </div>
-        {!isSubmitted && <button onClick={submitQuiz}>Submit Quiz</button>}
+            {!isSubmitted && (
+              <img
+                className="submitButton"
+                onClick={submitQuiz}
+                src="src/assets/icons8-finish-64 (1).png"
+              ></img>
+            )}
+          </div>
+        )}
       </section>
     </>
   );

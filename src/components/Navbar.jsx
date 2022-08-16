@@ -15,9 +15,9 @@ export default function Navbar() {
         <li>
           <Link to="/MathApp/">Home</Link>
         </li>
-        <li>Contact</li>
-        <li>MultiPlayer</li>
-        <li>About</li>
+        <li>
+          <Link to="/MathApp/choiceScreen">Quizzes</Link>
+        </li>
       </ul>
     </nav>
   );
