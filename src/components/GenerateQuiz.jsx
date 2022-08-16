@@ -105,12 +105,15 @@ export default function GenerateQuiz() {
 
             <section className="middleContainer">
               {index > 0 ? (
-                <img onClick={decreaseIndex} src="/icons8-back-64.png"></img>
+                <img
+                  onClick={decreaseIndex}
+                  src="src/components/icons8-back-64.png"
+                ></img>
               ) : (
                 <img
                   className="hidden"
                   onClick={decreaseIndex}
-                  src="/icons8-back-64.png"
+                  src="src/components/icons8-back-64.png"
                 ></img>
               )}
               <section className="answerChoices">
@@ -151,12 +154,15 @@ export default function GenerateQuiz() {
                   ))}
               </section>
               {index < questions.length - 1 ? (
-                <img onClick={increaseIndex} src="/icons8-forward-64.png"></img>
+                <img
+                  onClick={increaseIndex}
+                  src="src/components/icons8-forward-64.png"
+                ></img>
               ) : (
                 <img
                   className="hidden"
                   onClick={increaseIndex}
-                  src="/icons8-forward-64.png"
+                  src="src/components/icons8-forward-64.png"
                 ></img>
               )}
             </section>
@@ -164,7 +170,7 @@ export default function GenerateQuiz() {
               <img
                 className="submitButton"
                 onClick={submitQuiz}
-                src="/icons8-finish-64 (1).png"
+                src="src/components/icons8-finish-64 (1).png"
               ></img>
             )}
           </div>
