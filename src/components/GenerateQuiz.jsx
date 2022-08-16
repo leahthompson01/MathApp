@@ -107,7 +107,7 @@ export default function GenerateQuiz() {
               {index > 0 ? (
                 <img
                   onClick={decreaseIndex}
-                  src="https://github.com/leahthompson01/MathApp/blob/main/dist/icons8-back-64.png"
+                  src="https://github.com/leahthompson01/MathApp/blob/main/public/icons8-back-64.png"
                 ></img>
               ) : (
                 <img
@@ -156,13 +156,13 @@ export default function GenerateQuiz() {
               {index < questions.length - 1 ? (
                 <img
                   onClick={increaseIndex}
-                  src="https://github.com/leahthompson01/MathApp/blob/main/dist/icons8-forward-64.png"
+                  src="https://github.com/leahthompson01/MathApp/blob/main/public/icons8-forward-64.png"
                 ></img>
               ) : (
                 <img
                   className="hidden"
                   onClick={increaseIndex}
-                  src="https://github.com/leahthompson01/MathApp/blob/main/dist/icons8-forward-64.png"
+                  src="https://github.com/leahthompson01/MathApp/blob/main/public/icons8-forward-64.png"
                 ></img>
               )}
             </section>
@@ -170,7 +170,7 @@ export default function GenerateQuiz() {
               <img
                 className="submitButton"
                 onClick={submitQuiz}
-                src="https://github.com/leahthompson01/MathApp/blob/main/dist/icons8-finish-64%20(1).png"
+                src="https://github.com/leahthompson01/MathApp/blob/main/public/icons8-finish-64%20(1).png"
               ></img>
             )}
           </div>
