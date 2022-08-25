@@ -131,6 +131,7 @@ for css */
 }
 .options > div {
   border: 2px solid gray;
+  background-color: black;
   min-width: 5rem;
   max-height: 5rem;
   max-width: 18rem;
@@ -145,7 +146,7 @@ for css */
   text-align: center;
   display: flex;
   flex-direction: column;
-  /* background-color: rgba(19.2, 18.4, 18.4, 0.7); */
+  background-color: rgba(19.2, 18.4, 18.4, 0.7);
   width: 80%;
   margin: 2rem auto 0 auto;
   min-height: 31rem;
@@ -198,7 +199,7 @@ for css */
   margin-top: 4rem;
 }
 .indivAnswerOption {
-  /* background-color: black; */
+  background-color: black;
   border: 3px solid rgb(19, 19, 19);
   /* height: 4rem; */
   padding-top: 1rem;
@@ -212,7 +213,10 @@ for css */
 }
 .quizPage .answerChoices p:hover,
 .optionsPage .options div:hover {
-  background-color: var(--main-font-color);
+  background-color: rgb(71, 71, 71);
+  color: #d7907b;
+}
+.optionsPage .options a:hover {
   color: #d7907b;
 }
 .quizPage img:hover {
