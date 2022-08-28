@@ -20,8 +20,7 @@ export default function GenerateQuiz() {
     async function getQuestionData() {
       try {
         const response = await fetch(
-          "https://cryptic-brook-96547.herokuapp.com/quiz?operation=" +
-            operation
+          "https://math-app-api.onrender.com/quiz?operation=" + operation
         );
         const data = await response.json();
         setQuestions(data);
