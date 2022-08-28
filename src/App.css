@@ -198,11 +198,6 @@ for css */
   /* justify-content: space-around; */
   /* flex-direction: column; */
 }
-.startButton {
-  /* display: flex; */
-  margin-left: 45%;
-  margin-top: 4rem;
-}
 .indivAnswerOption {
   background-color: black;
   border: 3px solid rgb(19, 19, 19);
@@ -280,4 +275,13 @@ for css */
 }
 .quizButtons {
   margin-top: 5rem;
+}
+.quizButtons > img {
+  padding: 0 0.4rem;
+}
+.quizButtons > .startButton {
+  /* display: flex; */
+  padding: 0;
+  margin-left: 45%;
+  margin-top: 4rem;
 }
