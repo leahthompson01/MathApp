@@ -111,9 +111,9 @@ for css */
   display: flex;
   flex-direction: column;
   background-color: rgba(19.2, 18.4, 18.4, 0.7);
-  width: 80%;
+  width: 85%;
   margin: 2rem auto 0 auto;
-  height: 30rem;
+  height: 80%;
   border-radius: 15px;
   box-shadow: -1em 0 0.4em #c1dbe3, 1em 0 0.4em #c1dbe3;
 
@@ -132,11 +132,14 @@ for css */
 .options > div {
   border: 2px solid gray;
   background-color: black;
-  min-width: 5rem;
+  /* min-width: 5rem;
   max-height: 5rem;
-  max-width: 18rem;
+  max-width: 18rem; */
+  height: 100%;
+  width: 8rem;
   border-radius: 5px;
   text-align: center;
+  padding: 0 0.4rem;
   padding-top: 1rem;
   /* font-size: 16px; */
 }
@@ -147,9 +150,9 @@ for css */
   display: flex;
   flex-direction: column;
   background-color: rgba(19.2, 18.4, 18.4, 0.7);
-  width: 80%;
+  width: 85%;
   margin: 2rem auto 0 auto;
-  min-height: 31rem;
+  height: 80%;
   border-radius: 15px;
   box-shadow: -1em 0 0.4em #c1dbe3, 1em 0 0.4em #c1dbe3;
 }
@@ -167,12 +170,13 @@ for css */
   padding: 1rem 1.2rem 0 1.2rem;
 }
 .questionsContainer img {
-  margin: 8rem 1rem 0 1rem;
+  /* margin: 8rem 1rem 0 1rem; */
 
   max-height: 1.9rem;
   max-width: 3rem;
 }
 .answerChoices {
+  margin-top: 5rem;
   display: grid;
   align-self: center;
   /* padding: 7rem 18rem; */
@@ -202,10 +206,15 @@ for css */
   background-color: black;
   border: 3px solid rgb(19, 19, 19);
   /* height: 4rem; */
+  /* padding: 0 1rem; */
+  padding: 0 0.4rem;
   padding-top: 1rem;
-  min-width: 5rem;
+  /* min-width: 5rem;
   max-height: 5rem;
-  max-width: 18rem;
+  max-width: 18rem; */
+
+  height: 90%;
+  width: 8rem;
   border-radius: 5px;
   text-align: center;
   cursor: pointer;
@@ -243,7 +252,7 @@ for css */
 }
 .questionsContainer .submitButton {
   margin: 0;
-  margin-top: 1rem;
+  /* margin-top: 1rem; */
   min-height: 3rem;
   max-height: 5rem;
 }
@@ -267,4 +276,7 @@ for css */
   height: auto;
   padding-top: 7rem;
   margin: 0 auto;
+}
+.quizButtons {
+  margin-top: 5rem;
 }

@@ -103,18 +103,6 @@ export default function GenerateQuiz() {
             <h2>{questions[index].question}</h2>
 
             <section className="middleContainer">
-              {index > 0 ? (
-                <img
-                  onClick={decreaseIndex}
-                  src="https://raw.githubusercontent.com/leahthompson01/MathApp/main/public/icons8-back-64.png"
-                ></img>
-              ) : (
-                <img
-                  className="hidden"
-                  onClick={decreaseIndex}
-                  src="https://raw.githubusercontent.com/leahthompson01/MathApp/main/public/icons8-back-64.png"
-                ></img>
-              )}
               <section className="answerChoices">
                 {Object.keys(questions[index].answerChoices)
                   .sort(
@@ -152,6 +140,27 @@ export default function GenerateQuiz() {
                     </p>
                   ))}
               </section>
+            </section>
+            <div class="quizButtons">
+              {index > 0 ? (
+                <img
+                  onClick={decreaseIndex}
+                  src="https://raw.githubusercontent.com/leahthompson01/MathApp/main/public/icons8-back-64.png"
+                ></img>
+              ) : (
+                <img
+                  className="hidden"
+                  onClick={decreaseIndex}
+                  src="https://raw.githubusercontent.com/leahthompson01/MathApp/main/public/icons8-back-64.png"
+                ></img>
+              )}
+              {!isSubmitted && (
+                <img
+                  className="submitButton"
+                  onClick={submitQuiz}
+                  src="https://github.com/leahthompson01/MathApp/blob/main/public/icons8-finish-64%20(1).png?raw=true"
+                ></img>
+              )}
               {index < questions.length - 1 ? (
                 <img
                   onClick={increaseIndex}
@@ -164,14 +173,7 @@ export default function GenerateQuiz() {
                   src="https://github.com/leahthompson01/MathApp/blob/main/public/icons8-forward-64.png?raw=true"
                 ></img>
               )}
-            </section>
-            {!isSubmitted && (
-              <img
-                className="submitButton"
-                onClick={submitQuiz}
-                src="https://github.com/leahthompson01/MathApp/blob/main/public/icons8-finish-64%20(1).png?raw=true"
-              ></img>
-            )}
+            </div>
           </div>
         )}
       </section>
