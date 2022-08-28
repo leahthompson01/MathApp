@@ -88,7 +88,7 @@ for css */
   background-color: var(--main-font-color);
   border: 3px solid var(--main-bg-color);
   color: #e5625e;
-  font-size: 13px;
+  font-size: 18px;
   font-weight: 600;
 }
 .home button:hover {
@@ -168,6 +168,7 @@ for css */
 .optionsPage h2 {
   text-align: center;
   padding: 1rem 1.2rem 0 1.2rem;
+  line-height: 2.4rem;
 }
 .questionsContainer img {
   /* margin: 8rem 1rem 0 1rem; */

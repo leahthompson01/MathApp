@@ -20,7 +20,8 @@ export default function GenerateQuiz() {
     async function getQuestionData() {
       try {
         const response = await fetch(
-          "https://math-app-api.onrender.com/quiz?operation=" + operation
+          "https://math-app-api.onrender.com/quiz?operation=" +
+            operation.toLowerCase()
         );
         const data = await response.json();
         setQuestions(data);
