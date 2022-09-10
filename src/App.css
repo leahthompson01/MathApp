@@ -107,9 +107,9 @@ for css */
 }
 .optionsPage {
   color: white;
-  text-align: center;
+  /* text-align: center; */
   display: flex;
-  flex-direction: column;
+  /* flex-direction: column; */
   background-color: rgba(19.2, 18.4, 18.4, 0.7);
   width: 85%;
   margin: 2rem auto 0 auto;
@@ -148,7 +148,7 @@ for css */
   color: white;
   text-align: center;
   display: flex;
-  flex-direction: column;
+  /* flex-direction: column; */
   background-color: rgba(19.2, 18.4, 18.4, 0.7);
   width: 85%;
   margin: 2rem auto 0 auto;
@@ -166,6 +166,7 @@ for css */
 }
 .questionsContainer h2,
 .optionsPage h2 {
+  /* width: 100%; */
   text-align: center;
   padding: 1rem 1.2rem 0 1.2rem;
   line-height: 2.4rem;
@@ -254,7 +255,7 @@ for css */
 }
 .questionsContainer .submitButton:hover {
   /* max-height: 6rem; */
-  min-height: 3.5rem;
+  min-height: 3.2rem;
   width: auto;
 }
 .rightAnswer .selectedText,
@@ -274,6 +275,7 @@ for css */
   margin: 0 auto;
 }
 .quizButtons {
+  display: flex;
   margin-top: 5rem;
 }
 .quizButtons > img {
@@ -284,4 +286,15 @@ for css */
   padding: 0;
   margin-left: 45%;
   margin-top: 4rem;
+}
+.lobby {
+  width: 20%;
+  text-align: center;
+  /* padding: 0 2em; */
+}
+.quizSection,
+.optionsSection {
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
 }

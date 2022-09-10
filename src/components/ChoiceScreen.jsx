@@ -1,7 +1,7 @@
 // import { useState } from "react";
-import { Link, useNavigate, Navigate } from "react-router-dom";
-import GenerateQuiz from "./GenerateQuiz";
-import Navbar from "./Navbar";
+import { useNavigate } from "react-router-dom";
+
+import Lobby from "./Lobby";
 
 export default function ChoiceScreen() {
   let navigate = useNavigate();
@@ -13,29 +13,32 @@ export default function ChoiceScreen() {
   return (
     <>
       <div className="optionsPage">
-        <h2>Choose What Topic You Want to Be Quizzed On</h2>
-        <section className="options">
-          <div onClick={(e) => handleClick(e.target.innerText)}>
-            {/* <Link to="/MathApp/quiz" state={{ operation: "addition" }}> */}
-            Addition
-            {/* </Link> */}
-          </div>
-          <div onClick={(e) => handleClick(e.target.innerText)}>
-            {/* <Link to="/MathApp/quiz" state={{ operation: "subtraction" }}> */}
-            Subtraction
-            {/* </Link> */}
-          </div>
-          <div onClick={(e) => handleClick(e.target.innerText)}>
-            {/* <Link to="/MathApp/quiz" state={{ operation: "division" }}> */}
-            Division
-            {/* </Link> */}
-          </div>
-          <div onClick={(e) => handleClick(e.target.innerText)}>
-            <img></img>
-            {/* <Link to="/MathApp/quiz" state={{ operation: "multiplication" }}> */}
-            Multiplication
-            {/* </Link> */}
-          </div>
+        <Lobby />
+        <section className="optionsSection">
+          <h2>Choose What Topic You Want to Be Quizzed On</h2>
+          <section className="options">
+            <div onClick={(e) => handleClick(e.target.innerText)}>
+              {/* <Link to="/MathApp/quiz" state={{ operation: "addition" }}> */}
+              Addition
+              {/* </Link> */}
+            </div>
+            <div onClick={(e) => handleClick(e.target.innerText)}>
+              {/* <Link to="/MathApp/quiz" state={{ operation: "subtraction" }}> */}
+              Subtraction
+              {/* </Link> */}
+            </div>
+            <div onClick={(e) => handleClick(e.target.innerText)}>
+              {/* <Link to="/MathApp/quiz" state={{ operation: "division" }}> */}
+              Division
+              {/* </Link> */}
+            </div>
+            <div onClick={(e) => handleClick(e.target.innerText)}>
+              <img></img>
+              {/* <Link to="/MathApp/quiz" state={{ operation: "multiplication" }}> */}
+              Multiplication
+              {/* </Link> */}
+            </div>
+          </section>
         </section>
       </div>
     </>

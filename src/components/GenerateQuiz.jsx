@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { v4 as uuid } from "uuid";
-import Navbar from "./Navbar";
+import Lobby from "./Lobby";
 import { useLocation } from "react-router-dom";
 
 export default function GenerateQuiz() {
@@ -93,90 +93,95 @@ export default function GenerateQuiz() {
   return (
     <>
       <section className="quizPage">
-        {questions.length <= 1 ? (
-          <img
-            className="loadingGif"
-            src="https://media.giphy.com/media/3o7bu3XilJ5BOiSGic/giphy.gif"
-          ></img>
-        ) : (
-          <div className="questionsContainer">
-            {isSubmitted && <p className="score">Your Score is {score}</p>}
-            <h2>{questions[index].question}</h2>
+        <Lobby />
+        <section className="quizSection">
+          {questions.length <= 1 ? (
+            <img
+              className="loadingGif"
+              src="https://media.giphy.com/media/3o7bu3XilJ5BOiSGic/giphy.gif"
+            ></img>
+          ) : (
+            <div className="questionsContainer">
+              {isSubmitted && <p className="score">Your Score is {score}</p>}
+              <h2>{questions[index].question}</h2>
 
-            <section className="middleContainer">
-              <section className="answerChoices">
-                {Object.keys(questions[index].answerChoices)
-                  .sort(
-                    (a, b) =>
-                      questions[index].answerChoices[a] -
-                      questions[index].answerChoices[b]
-                  )
-                  .map((answerOptions) => (
-                    <p
-                      key={uuid()}
-                      onClick={selectAnswer}
-                      className={
-                        answers[index] ==
-                        questions[index].answerChoices[answerOptions]
-                          ? isSubmitted
+              <section className="middleContainer">
+                <section className="answerChoices">
+                  {Object.keys(questions[index].answerChoices)
+                    .sort(
+                      (a, b) =>
+                        questions[index].answerChoices[a] -
+                        questions[index].answerChoices[b]
+                    )
+                    .map((answerOptions) => (
+                      <p
+                        key={uuid()}
+                        onClick={selectAnswer}
+                        className={
+                          answers[index] ==
+                          questions[index].answerChoices[answerOptions]
+                            ? isSubmitted
+                              ? questions[index].answerChoices[answerOptions] ==
+                                questions[index].rightAnswer
+                                ? "rightAnswer selectedAnswer indivAnswerOption"
+                                : "wrongAnswer selectedAnswer indivAnswerOption"
+                              : "indivAnswerOption selectedAnswer nonSubmitted"
+                            : isSubmitted
                             ? questions[index].answerChoices[answerOptions] ==
                               questions[index].rightAnswer
-                              ? "rightAnswer selectedAnswer indivAnswerOption"
-                              : "wrongAnswer selectedAnswer indivAnswerOption"
-                            : "indivAnswerOption selectedAnswer nonSubmitted"
-                          : isSubmitted
-                          ? questions[index].answerChoices[answerOptions] ==
-                            questions[index].rightAnswer
-                            ? "rightAnswer indivAnswerOption"
-                            : "wrongAnswer indivAnswerOption"
-                          : "indivAnswerOption"
-                      }
-                    >
-                      {questions[index].answerChoices[answerOptions]}
-                      {isSubmitted &&
-                        answers[index] ==
-                          questions[index].answerChoices[answerOptions] && (
-                          <p className="selectedText">You picked</p>
-                        )}
-                    </p>
-                  ))}
+                              ? "rightAnswer indivAnswerOption"
+                              : "wrongAnswer indivAnswerOption"
+                            : "indivAnswerOption"
+                        }
+                      >
+                        {questions[index].answerChoices[answerOptions]}
+                        {isSubmitted &&
+                          answers[index] ==
+                            questions[index].answerChoices[answerOptions] && (
+                            <p className="selectedText">You picked</p>
+                          )}
+                      </p>
+                    ))}
+                </section>
               </section>
-            </section>
-            <div class="quizButtons">
-              {index > 0 ? (
-                <img
-                  onClick={decreaseIndex}
-                  src="https://raw.githubusercontent.com/leahthompson01/MathApp/main/public/icons8-back-64.png"
-                ></img>
-              ) : (
-                <img
-                  className="hidden"
-                  onClick={decreaseIndex}
-                  src="https://raw.githubusercontent.com/leahthompson01/MathApp/main/public/icons8-back-64.png"
-                ></img>
-              )}
-              {!isSubmitted && (
-                <img
-                  className="submitButton"
-                  onClick={submitQuiz}
-                  src="https://github.com/leahthompson01/MathApp/blob/main/public/icons8-finish-64%20(1).png?raw=true"
-                ></img>
-              )}
-              {index < questions.length - 1 ? (
-                <img
-                  onClick={increaseIndex}
-                  src="https://github.com/leahthompson01/MathApp/blob/main/public/icons8-forward-64.png?raw=true"
-                ></img>
-              ) : (
-                <img
-                  className="hidden"
-                  onClick={increaseIndex}
-                  src="https://github.com/leahthompson01/MathApp/blob/main/public/icons8-forward-64.png?raw=true"
-                ></img>
-              )}
+              <div class="quizButtons">
+                {index > 0 ? (
+                  <img
+                    onClick={decreaseIndex}
+                    src="https://raw.githubusercontent.com/leahthompson01/MathApp/main/public/icons8-back-64.png"
+                  ></img>
+                ) : (
+                  <img
+                    className="hidden"
+                    onClick={decreaseIndex}
+                    src="https://raw.githubusercontent.com/leahthompson01/MathApp/main/public/icons8-back-64.png"
+                  ></img>
+                )}
+                {!isSubmitted && (
+                  <section className="submitSection" onClick={submitQuiz}>
+                    <img
+                      className="submitButton"
+                      src="https://raw.githubusercontent.com/leahthompson01/MathApp/main/public/icons8-quiz-64.png"
+                    />
+                    <h3>Submit Quiz</h3>
+                  </section>
+                )}
+                {index < questions.length - 1 ? (
+                  <img
+                    onClick={increaseIndex}
+                    src="https://github.com/leahthompson01/MathApp/blob/main/public/icons8-forward-64.png?raw=true"
+                  ></img>
+                ) : (
+                  <img
+                    className="hidden"
+                    onClick={increaseIndex}
+                    src="https://github.com/leahthompson01/MathApp/blob/main/public/icons8-forward-64.png?raw=true"
+                  ></img>
+                )}
+              </div>
             </div>
-          </div>
-        )}
+          )}
+        </section>
       </section>
     </>
   );
