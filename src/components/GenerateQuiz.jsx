@@ -38,7 +38,6 @@ export default function GenerateQuiz() {
     // setQuestions(data);
     getQuestionData();
   }, []);
-
   // console.log(questions);
 
   function decreaseIndex() {
@@ -87,7 +86,8 @@ export default function GenerateQuiz() {
     console.log(score);
     console.log(count);
   }
-  console.log(indexCorrectAnswers);
+  // console.log(indexCorrectAnswers);
+  // console.log(answers);
   // console.log(questions);
   // console.log(questions[0]);
   return (
@@ -144,9 +144,10 @@ export default function GenerateQuiz() {
                     ))}
                 </section>
               </section>
-              <div class="quizButtons">
+              <div className="quizButtons">
                 {index > 0 ? (
                   <img
+                    className="backButton"
                     onClick={decreaseIndex}
                     src="https://raw.githubusercontent.com/leahthompson01/MathApp/main/public/icons8-back-64.png"
                   ></img>
@@ -157,7 +158,7 @@ export default function GenerateQuiz() {
                     src="https://raw.githubusercontent.com/leahthompson01/MathApp/main/public/icons8-back-64.png"
                   ></img>
                 )}
-                {!isSubmitted && (
+                {!isSubmitted && Object.keys(answers).length > 9 && (
                   <section className="submitSection" onClick={submitQuiz}>
                     <img
                       className="submitButton"
@@ -168,6 +169,7 @@ export default function GenerateQuiz() {
                 )}
                 {index < questions.length - 1 ? (
                   <img
+                    className="forwardButton"
                     onClick={increaseIndex}
                     src="https://github.com/leahthompson01/MathApp/blob/main/public/icons8-forward-64.png?raw=true"
                   ></img>

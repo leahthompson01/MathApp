@@ -279,7 +279,7 @@ for css */
   margin-top: 5rem;
 }
 .quizButtons > img {
-  padding: 0 0.4rem;
+  margin: 0 1.4rem;
 }
 .quizButtons > .startButton {
   /* display: flex; */
