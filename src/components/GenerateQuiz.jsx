@@ -3,6 +3,7 @@ import { v4 as uuid } from "uuid";
 import Lobby from "./Lobby";
 import { useLocation } from "react-router-dom";
 
+
 export default function GenerateQuiz() {
   const location = useLocation();
   // const url = "https://cryptic-brook-96547.herokuapp.com/quiz";
