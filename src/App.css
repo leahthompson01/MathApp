@@ -258,6 +258,9 @@ for css */
   min-height: 3.2rem;
   width: auto;
 }
+.selectedText{
+  display: inline-block;
+}
 .rightAnswer .selectedText,
 .selectedText {
   width: 100%;

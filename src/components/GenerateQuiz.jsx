@@ -8,7 +8,7 @@ export default function GenerateQuiz() {
   const location = useLocation();
   // const url = "https://cryptic-brook-96547.herokuapp.com/quiz";
   const { operation } = location.state;
-  console.log(operation);
+  // console.log(operation);
   const [questions, setQuestions] = useState([
     { question: "", rightAnswer: "", operand: "", answerChoices: {} },
   ]);
@@ -21,11 +21,15 @@ export default function GenerateQuiz() {
     async function getQuestionData() {
       try {
         const response = await fetch(
-          "https://math-app-api.onrender.com/quiz?operation=" +
+          "https://flaskmathapi.onrender.com/quiz/" +
             operation.toLowerCase()
         );
         const data = await response.json();
-        setQuestions(data);
+        // console.log(data)
+      //  console.log( data.forEach(obj => obj = JSON.parse(obj)))
+        // const newData = await data.forEach(obj => console.log(JSON.parse(obj)))
+        // console.log(newData)
+        setQuestions(data.map(el => JSON.parse(el)));
       } catch (error) {
         console.error(error);
       }
@@ -84,8 +88,8 @@ export default function GenerateQuiz() {
     }
     // console.log(answers);
     setScore(count);
-    console.log(score);
-    console.log(count);
+    // console.log(score);
+    // console.log(count);
   }
   // console.log(indexCorrectAnswers);
   // console.log(answers);
@@ -139,7 +143,7 @@ export default function GenerateQuiz() {
                         {isSubmitted &&
                           answers[index] ==
                             questions[index].answerChoices[answerOptions] && (
-                            <p className="selectedText">You picked</p>
+                            <span className="selectedText">You picked</span>
                           )}
                       </p>
                     ))}

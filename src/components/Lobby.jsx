@@ -8,13 +8,14 @@ export default function Lobby() {
   function handleClick() {
     //   this will be the function that sends
     //request to server to start lobby
+    // io.socket
   }
   function handleJoin() {
     // this will handle joining an existing lobby
   }
   return (
     <section className="lobby">
-      {usersInLobby.length < 1 ? (
+      {/* {usersInLobby.length < 1 ? (
         <div>
           <p>No Users in Lobby</p>
           <p>Click Below to Create New Lobby</p>
@@ -31,7 +32,7 @@ export default function Lobby() {
             <p key={uuid()}>{userName}</p>
           ))}
         </div>
-      )}
+      )} */}
       {/* will show all users in the lobby */}
     </section>
   );
