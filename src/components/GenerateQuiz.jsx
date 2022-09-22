@@ -1,10 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { v4 as uuid } from "uuid";
 import Lobby from "./Lobby";
 import { useLocation } from "react-router-dom";
-
+import { SocketContext } from "../context/socket";
 
 export default function GenerateQuiz() {
+  const socket = useContext(SocketContext)
   const location = useLocation();
   // const url = "https://cryptic-brook-96547.herokuapp.com/quiz";
   const { operation } = location.state;
@@ -12,11 +13,14 @@ export default function GenerateQuiz() {
   const [questions, setQuestions] = useState([
     { question: "", rightAnswer: "", operand: "", answerChoices: {} },
   ]);
+  const [response,setResponse] = useState('')
   const [index, setIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [answers, setAnswers] = useState({});
   const [isSubmitted, setSubmitted] = useState(false);
   const [indexCorrectAnswers, setIndexCorrectAnswers] = useState([]);
+ socket.on('message',msg => setResponse(msg))
+//  console.log(response)
   useEffect(() => {
     async function getQuestionData() {
       try {
@@ -79,6 +83,7 @@ export default function GenerateQuiz() {
 
   function submitQuiz() {
     setSubmitted(true);
+    
     let count = 0;
     for (let i = 0; i < questions.length; i++) {
       if (answers[i] && answers[i] == questions[i].rightAnswer) {
@@ -90,6 +95,7 @@ export default function GenerateQuiz() {
     setScore(count);
     // console.log(score);
     // console.log(count);
+    socket.emit('submit_quiz', {user: response.split(' ')[0],score:count})
   }
   // console.log(indexCorrectAnswers);
   // console.log(answers);
@@ -98,7 +104,9 @@ export default function GenerateQuiz() {
   return (
     <>
       <section className="quizPage">
-        <Lobby />
+        <Lobby 
+        message={response.split(' ')}
+        />
         <section className="quizSection">
           {questions.length <= 1 ? (
             <img

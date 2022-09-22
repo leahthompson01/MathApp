@@ -101,7 +101,7 @@ for css */
   min-height: 1rem;
   width: auto;
   max-width: 70%;
-  padding: 0.8rem 0rem 0.5rem 0;
+  padding: 1.2rem 0rem 0.5rem 0;
   /* margin: 0;  */
   /* margin: 0 auto; */
 }
@@ -293,7 +293,16 @@ for css */
 .lobby {
   width: 20%;
   text-align: center;
-  /* padding: 0 2em; */
+  padding: 0 1em;
+  background-color: #61787d;
+  border-radius: 10px 0 0 10px;
+}
+.lobby p{
+  width: 100%;
+}
+.lobby input{
+  width: 100%;
+  margin-bottom: 1rem;
 }
 .quizSection,
 .optionsSection {

@@ -31,11 +31,11 @@ function App() {
     //   socket.off('pong')
     // }
   },[])
-
+  console.log(socket)
   return (
     <div className="app">
       <Navbar />
-      {/* <Home /> */}\
+      {/* <Home /> */}
       <SocketContext.Provider value={socket}>
       <Routes>
         <Route path="/MathApp" element={<Home />} />
