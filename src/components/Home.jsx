@@ -1,9 +1,13 @@
 import { Link } from "react-router-dom";
 import mathMatchLogo from "./Logo2.png";
+import Lobby from "../components/Lobby"
 
 export default function Home() {
   return (
+    <div className="homeContainer">
+    <Lobby />
     <div className="home">
+      
       {/* <img
         className="mainLogo"
         alt="two M's with the words Math Matches written in the middle, across the M's"
@@ -17,6 +21,7 @@ export default function Home() {
         quizzes
       </p>
       <Link to="/MathApp/ChoiceScreen">{<button>Get Started</button>}</Link>
+    </div>
     </div>
   );
 }

@@ -5,13 +5,14 @@ import { v4 as uuid } from "uuid";
 
 
 export default function Lobby({message}) {
+  console.log(message)
   const [username,setUsername] = useState('')
   const [usersInLobby, setUsersInLobby] = useState([]);
   const [lobbyCode, setLobbyCode] = useState('');
   const socket = useContext(SocketContext)
  let navigate = useNavigate()
   useEffect(()=> {
-    if(message.length == 2 ){
+    if(message !== undefined && message.length >= 2 ){
       setUsersInLobby(prevArr => [message[0]])
     }
   }, [message])
