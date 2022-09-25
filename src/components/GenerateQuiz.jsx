@@ -8,8 +8,9 @@ export default function GenerateQuiz() {
   const socket = useContext(SocketContext)
   const location = useLocation();
   // const url = "https://cryptic-brook-96547.herokuapp.com/quiz";
-  const { operation } = location.state;
-  // console.log(operation);
+  const { operation, joiningQuiz,lobbyCode,users } = location.state;
+
+  console.log(users)
   const [questions, setQuestions] = useState([
     { question: "", rightAnswer: "", operand: "", answerChoices: {} },
   ]);
@@ -21,23 +22,37 @@ export default function GenerateQuiz() {
   const [indexCorrectAnswers, setIndexCorrectAnswers] = useState([]);
  socket.on('message',msg => setResponse(msg))
 //  console.log(response)
+let url
+if(joiningQuiz == true){
+  url = `http://localhost:5000/joinquiz/${lobbyCode}`
+}else if(operation !== undefined){
+  url = "https://flaskmathapi.onrender.com/quiz/" + operation.toLowerCase()
+
+}
   useEffect(() => {
     async function getQuestionData() {
       try {
+        
         const response = await fetch(
-          "https://flaskmathapi.onrender.com/quiz/" +
-            operation.toLowerCase()
+          url
         );
         const data = await response.json();
+          console.log(data)
         // console.log(data)
       //  console.log( data.forEach(obj => obj = JSON.parse(obj)))
         // const newData = await data.forEach(obj => console.log(JSON.parse(obj)))
         // console.log(newData)
-        setQuestions(data.map(el => JSON.parse(el)));
+        if(url == `http://localhost:5000/joinquiz/${lobbyCode}`){
+          setQuestions(data)
+        }else{
+          setQuestions(data.map(el => JSON.parse(el)));
+        }
+        
       } catch (error) {
         console.error(error);
       }
     }
+ 
     // fetch(
     //   "https://cryptic-brook-96547.herokuapp.com/quiz?operation=" + operation
     // )
@@ -46,9 +61,15 @@ export default function GenerateQuiz() {
     //   .catch((err) => console.error(err));
     // setQuestions(data);
     getQuestionData();
-  }, []);
-  // console.log(questions);
+  }, [])
 
+  // if(quizData !== undefined){
+  //   setQuestions(quizData.quiz)
+  //   setResponse(quizData.msg[0])
+  // }
+  if(response != " " && response !== undefined){
+    socket.emit('quiz_start', {msg: response.split(' ')[1], quiz: questions})
+  }
   function decreaseIndex() {
     setIndex((prevIndex) => {
       if (prevIndex !== 0) {

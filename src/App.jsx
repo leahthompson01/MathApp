@@ -7,6 +7,7 @@ import Navbar from "./components/Navbar";
 import { Routes, Route } from "react-router-dom";
 import ChoiceScreen from "./components/ChoiceScreen";
 import GenerateQuiz from "./components/GenerateQuiz";
+import JoiningQuiz from "./components/JoiningQuiz";
 import {SocketContext, socket} from './context/socket'
 
 //this will need to be moved to quizcomponent?
@@ -41,6 +42,7 @@ function App() {
         <Route path="/MathApp" element={<Home />} />
         <Route path="/MathApp/choiceScreen" element={<ChoiceScreen />} />
         <Route path="/MathApp/quiz" element={<GenerateQuiz />} />
+        <Route path="/MathApp/joinquiz" element={<JoiningQuiz />} />
       </Routes>
       </SocketContext.Provider>
     </div>

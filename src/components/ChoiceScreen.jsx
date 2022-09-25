@@ -11,9 +11,7 @@ export default function ChoiceScreen() {
   const socket = useContext(SocketContext)
   let navigate = useNavigate();
   function handleClick(operation) {
-    if(username.length < 1){
 
-    }
     // console.log(operation);
     //switched to using useNavigate() instead of Link from react-router-dom
     // here is where code to join room would go
@@ -22,11 +20,11 @@ export default function ChoiceScreen() {
     console.log('trying to join room')
     navigate("/MathApp/quiz", { state: { operation: `${operation}` } });
   }
-  console.log(username)
+  // console.log(username)
   return (
     <>
       <div className="optionsPage">
-        {/* <Lobby /> */}
+        <Lobby  />
         <section className="optionsSection">
           <h2>Choose What Topic You Want to Be Quizzed On</h2>
           <form className="optionsSection">
