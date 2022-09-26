@@ -8,9 +8,11 @@ export default function GenerateQuiz() {
   const socket = useContext(SocketContext)
   const location = useLocation();
   // const url = "https://cryptic-brook-96547.herokuapp.com/quiz";
-  const { operation, joiningQuiz,lobbyCode,users } = location.state;
+  const { operation, joiningQuiz,lobbyCode} = location.state;
+  // 
+  const [newUser, setNewUser] = useState('')
+  // console.log('lobby code',lobbyCode)
 
-  console.log(users)
   const [questions, setQuestions] = useState([
     { question: "", rightAnswer: "", operand: "", answerChoices: {} },
   ]);
@@ -19,9 +21,27 @@ export default function GenerateQuiz() {
   const [score, setScore] = useState(0);
   const [answers, setAnswers] = useState({});
   const [isSubmitted, setSubmitted] = useState(false);
+  const [users, setUsers] = useState([])
+  const [userLeft, setUserLeft] = useState('false')
   const [indexCorrectAnswers, setIndexCorrectAnswers] = useState([]);
- socket.on('message',msg => setResponse(msg))
-//  console.log(response)
+ socket.on('message',msg => {
+  let strArr = msg.split(' ')
+  console.log('message ' + msg)
+  if(strArr.length <= 2){
+    setResponse(msg)
+  }else if(strArr.includes('joined')){
+    setNewUser(msg.split(' ')[0])
+  }else if(strArr.includes('left')){
+    setUserLeft('true')
+  }
+  
+})
+  console.log('new user? ' +newUser)
+//  console.log('this is response', response)
+//  console.log('lobby code ' + updatedLobby)
+//  useEffect(() =>
+//  setUpdatedLobby(prevValue => response.split('')[1])
+//  ,[response])
 let url
 if(joiningQuiz == true){
   url = `http://localhost:5000/joinquiz/${lobbyCode}`
@@ -33,41 +53,42 @@ if(joiningQuiz == true){
     async function getQuestionData() {
       try {
         
-        const response = await fetch(
+        const resp = await fetch(
           url
         );
-        const data = await response.json();
-          console.log(data)
+        const data = await resp.json();
         // console.log(data)
       //  console.log( data.forEach(obj => obj = JSON.parse(obj)))
         // const newData = await data.forEach(obj => console.log(JSON.parse(obj)))
         // console.log(newData)
         if(url == `http://localhost:5000/joinquiz/${lobbyCode}`){
           setQuestions(data)
+          const resp2 = await fetch(`http://localhost:5000/users/${lobbyCode}`)
+          const allUsers = await resp2.json()
+          setUsers(allUsers)
         }else{
           setQuestions(data.map(el => JSON.parse(el)));
+          // if(response !== undefined || response.length > 1){
+          //   const resp3 = await fetch(`http://localhost:5000/users/${response[1].trim()}`)
+          //   const otherUsers = await resp3.json()
+          //   console.log(otherUsers)
+          //   setUsers(prevArr => [...prevArr, otherUsers])
+          // }
         }
         
       } catch (error) {
         console.error(error);
       }
     }
- 
-    // fetch(
-    //   "https://cryptic-brook-96547.herokuapp.com/quiz?operation=" + operation
-    // )
-    //   .then((response) => response.json())
-    //   .then((data) => setQuestions(data))
-    //   .catch((err) => console.error(err));
-    // setQuestions(data);
     getQuestionData();
   }, [])
 
-  // if(quizData !== undefined){
-  //   setQuestions(quizData.quiz)
-  //   setResponse(quizData.msg[0])
-  // }
-  if(response != " " && response !== undefined){
+  // useEffect(() =>{
+  //   if(response != " " && response !== undefined){
+  //     socket.emit('quiz_start', {msg: response.split(' ')[1], quiz: questions})
+  //   }
+  // }, [response])
+  if(response != " " && response !== undefined && response !== ''){
     socket.emit('quiz_start', {msg: response.split(' ')[1], quiz: questions})
   }
   function decreaseIndex() {
@@ -122,11 +143,32 @@ if(joiningQuiz == true){
   // console.log(answers);
   // console.log(questions);
   // console.log(questions[0]);
+    // useEffect(() =>{
+    //   //   async function getUsers(){
+    //   //     try{
+    //   //     console.log('updated Lobby code' + lobbyCode)
+    //   //     if(updatedLobby !== undefined){
+    //   //       const resp = await fetch(`http://localhost:5000/users/${lobbyCode}`)
+    //   //       const users = await resp.json()
+    //   //       setUsers(users)
+    //   //     }
+    //   //     }catch(err){
+    //   //     console.log(err)
+    //   //   }
+    //   // }
+    //   // getUsers()
+    //   setUpdatedLobby(prev => lobbyCode)
+    //   console.log('updated Lobby code' + lobbyCode)
+    // }, [lobbyCode])
+  
   return (
     <>
       <section className="quizPage">
         <Lobby 
-        message={response.split(' ')}
+         message =  {response.split(' ')}
+         users = {users}
+         currentLobby = {lobbyCode}
+         newUser = {newUser}
         />
         <section className="quizSection">
           {questions.length <= 1 ? (

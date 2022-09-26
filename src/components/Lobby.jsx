@@ -4,8 +4,11 @@ import {useNavigate} from "react-router-dom"
 import { v4 as uuid } from "uuid";
 
 
-export default function Lobby({message}) {
-  console.log(message)
+export default function Lobby({message,users,currentLobby, newUser}) {
+  console.log('message '+message)
+  // console.log(users)
+  // console.log('current Lobby '+currentLobby)
+  // console.log('new user is '+ newUser)
   const [username,setUsername] = useState('')
   const [usersInLobby, setUsersInLobby] = useState([]);
   const [lobbyCode, setLobbyCode] = useState('');
@@ -14,27 +17,32 @@ export default function Lobby({message}) {
  let navigate = useNavigate()
   useEffect(()=> {
     if(message !== undefined && message.length >= 2 ){
-      setUsersInLobby(prevArr => [message[0]])
+      setUsersInLobby(prevArr => [{username: message[0], isQuizSubmitted: false}])
+      console.log(usersInLobby)
+      setLobbyCode( message[1])
     }
   }, [message])
-
-  socket.on('message', msg =>{
-    console.log(msg)
-  useEffect(() =>{
-    if(message === undefined || message.length < 1){
-      async function getUsers(){
-        try{
-          const response = await fetch(`http://localhost:5000/users/${lobbyCode}`)
-          const users = await response.json()
-          setUsersInLobby(users)
-        }catch(err){
-        console.log(err)
-      }
+  // console.log(users)
+  useEffect(()=>{
+    if(users !== undefined){
+      setUsersInLobby(users)
     }
-    getUsers()
-  }}, [])
-})
+  }, [users])
+  console.log(usersInLobby)
+  useEffect(()=>{
+    if(newUser !== undefined){
+      setUsersInLobby(usersInLobby => [...usersInLobby, {username: newUser, quizSubmitted: false}])
+      // navigate('')
+    }
+  },[newUser])
+ useEffect(()=> {
+  if(currentLobby !== undefined){
+    setLobbyCode(currentLobby)
+  }
+ },[currentLobby])
+
   // console.log(usersInLobby)
+  // console.log(lobbyCode)
   function handleLeave(){
     socket.emit('leave', {'username': message[0], 'room': message[1]})
     navigate("/MathApp/")
@@ -45,17 +53,15 @@ export default function Lobby({message}) {
     // this will handle joining an existing lobby
     socket.emit('existing_room',{username, lobbyCode})
     event.preventDefault();
-    socket.on('message', data => setData(data))
+
     navigate("/MathApp/quiz", { state: { joiningQuiz: true, lobbyCode: lobbyCode, users: data } })
   }
-  // socket.on('message', data => {
-    
-  //   console.log(data)
-  //   navigate("/MathApp/joinquiz", { state: { quizData: quiz } })
-  // })
+  
+  // socket.on('message', msg => console.log('this is the msg '+msg))
+  // console.log(message)
   return (
     <section className="lobby">
-      {usersInLobby.length < 1 && message === undefined  ? (
+      {message === undefined || usersInLobby.length <1  ? (
         <div>
           <p>No Users in Lobby</p>
           {/* <p>Click Below to Create New Lobby</p>
@@ -71,28 +77,25 @@ export default function Lobby({message}) {
         </div>
       ) : (
         <div>
-          <p>Lobby Code: {message[1]}</p>
-          {usersInLobby.length > 1 &&
+          <p>Lobby Code: {lobbyCode}</p>
+          {usersInLobby.length >= 2 &&
           <section className="users">
             Users in Lobby: {
             usersInLobby.map(user => (
               <p
-              key={uuid()}>{user.username.toUpperCase()}</p>
+              key={uuid()}>{user.username !== undefined && user.username.toUpperCase()}</p>
             ))
             }
           </section>
           }
-          {/* {
-           usersInLobby.length == 1 &&
-            <section className="users">
-            Users in Lobby: {
-            usersInLobby.map(user => (
-              <p
-              key={uuid()}>{user.toUpperCase()}</p>
-            ))
-            }
+          {/* <div>
+          {
+          usersInLobby.length === 1 &&
+          <section className="users">
+           <p> Users in Lobby: {message[0].toUpperCase()} </p>
           </section>
-          } */}
+         }
+          </div> */}
           <button onClick={handleLeave}>Leave Lobby</button>
         </div>
       )}
