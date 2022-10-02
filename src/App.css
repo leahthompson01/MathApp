@@ -1,12 +1,14 @@
 :root {
-  --main-bg-color: lightgray;
+  --main-bg-color: #d3d3d3;
   --main-font-color: #c1dbe3;
 }
 * {
   box-sizing: border-box;
 }
 
-html, body, #root {
+html,
+body,
+#root {
   margin: 0;
   height: 100%;
   padding: 0;
@@ -26,8 +28,8 @@ html, body, #root {
 for css */
 
 .navbar {
-  /* margin-top: 3%; */
-  padding: 0.2rem;
+  /* margin: 0.3rem 0; */
+  padding: 0.2rem 0;
   background-color: rgb(19, 19, 19);
   border-bottom: 2px solid #312f2f;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.4);
@@ -36,10 +38,10 @@ for css */
   /* padding-bottom: 1rem; */
 }
 .navbar ul {
-  /* margin: 0;
-  padding: 0; */
+  margin-top: 1rem;
+  /* padding: 0;  */
   display: flex;
-  /* justify-content: space-around; */
+  /* justify-content: space-between; */
   list-style: none;
   align-items: center;
   height: 1rem;
@@ -51,6 +53,9 @@ for css */
 .optionsPage .options div > a {
   text-decoration: none;
   /* font-size: 14px; */
+}
+.navbar ul > li:first-of-type {
+  margin-right: 60%;
 }
 .navbar ul a:hover {
   color: #d7907b;
@@ -77,9 +82,9 @@ for css */
   /* box-shadow: -1em 0 0.4em #c1dbe3, 1em 0 0.4em #c1dbe3; */
   color: black;
 }
-.homeContainer{
+.homeContainer {
   display: flex;
-  height: calc(100% - 3rem)
+  height: calc(100% - 3rem);
 }
 .home h1 {
   font-size: 1.7rem;
@@ -91,24 +96,25 @@ for css */
 .home button {
   border-radius: 17px;
   padding: 0.5rem;
-  background-color: var(--main-font-color);
+  /* background-color: var(--main-font-color); */
   border: 3px solid var(--main-bg-color);
   color: #e5625e;
   font-size: 18px;
   font-weight: 600;
 }
-.home button:hover {
+.home button:hover,
+.lobby button:hover {
   background-color: #e5625e;
   color: white;
   border-color: var(--main-font-color);
 }
 .mainLogo {
-  max-height: 7rem;
+  max-height: 7.6rem;
   min-height: 1rem;
   width: auto;
   max-width: 70%;
-  padding: 1.2rem 0rem 0.5rem 0;
-  /* margin: 0;  */
+  padding: 1.5rem 0 1rem 1.8rem;
+  /* margin: 0.1rem; */
   /* margin: 0 auto; */
 }
 .optionsPage {
@@ -146,12 +152,12 @@ for css */
   border-radius: 5px;
   text-align: center;
   padding: 0 0.4rem;
-  padding-top: 1rem;
+  padding-top: 0.3rem;
   /* font-size: 16px; */
 }
 
 .quizPage {
-  color: white;
+  color: #61787d;
   text-align: center;
   display: flex;
   /* flex-direction: column; */
@@ -176,11 +182,11 @@ for css */
   padding: 1rem 1.2rem 0 1.2rem;
   line-height: 2.4rem;
 }
-.questionsContainer img {
+.questionsContainer svg {
   /* margin: 8rem 1rem 0 1rem; */
-
-  max-height: 1.9rem;
-  max-width: 3rem;
+  min-width: 4rem;
+  max-height: 2.6rem;
+  max-width: 6rem;
 }
 .answerChoices {
   margin-top: 5rem;
@@ -205,6 +211,7 @@ for css */
   /* flex-direction: column; */
 }
 .indivAnswerOption {
+  color: white;
   background-color: black;
   border: 3px solid rgb(19, 19, 19);
   /* height: 4rem; */
@@ -230,7 +237,7 @@ for css */
 .optionsPage .options a:hover {
   color: #d7907b;
 }
-.quizPage img:hover {
+.quizPage svg:hover {
   /* border: 2px solid gray; */
   max-height: 2.6rem;
   cursor: pointer;
@@ -263,7 +270,7 @@ for css */
   min-height: 3.2rem;
   width: auto;
 }
-.selectedText{
+.selectedText {
   display: inline-block;
 }
 .rightAnswer .selectedText,
@@ -273,7 +280,7 @@ for css */
   color: white;
 }
 .quizPage .questionsContainer .answerChoices .nonSubmitted {
-  color: white;
+  color: #61787d;
 }
 .loadingGif {
   min-width: 5rem;
@@ -296,18 +303,23 @@ for css */
   margin-top: 4rem;
 }
 .lobby {
-  width: 20%;
+  width: 25%;
   /* height: calc(100% - 3rem); */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   text-align: center;
-  padding: 0 1em;
+  padding: 1.4rem 1rem;
+  color: var(--main-font-color);
   background-color: #61787d;
   /* border-radius: 10px 0 0 10px; */
 }
-.lobby p{
+.lobby p {
   width: 100%;
 }
-.lobby input{
+.lobby input {
   width: 100%;
+  padding: 1rem 0;
   margin-bottom: 1rem;
 }
 .quizSection,
@@ -315,4 +327,86 @@ for css */
   display: flex;
   flex-direction: column;
   margin: 0 auto;
+}
+
+.lobby input {
+  border-radius: 10px;
+  width: 90%;
+  padding: 0.6rem 0;
+  margin: 0.6rem 0;
+}
+.optionsSection input {
+  border-radius: 10px;
+  padding: 0.6rem 0;
+  margin: 0.6rem 0;
+}
+
+.lobby button {
+  border-radius: 15px;
+  padding: 0.4rem 1.3rem;
+  font-size: 1rem;
+  border: 3px solid var(--main-bg-color);
+  color: #e5625e;
+}
+.options div > svg {
+  width: 50%;
+  /* display: block; */
+}
+@media only screen and (max-width: 800px) {
+  .quizPage,
+  .optionsPage,
+  .homeContainer {
+    margin: 0;
+    padding: 0;
+    flex-direction: column-reverse;
+    justify-content: space-between;
+    /* height: 100%; */
+  }
+  .options {
+    margin: 1rem 0;
+  }
+  .optionsPage h2 {
+    margin-top: 0.5rem;
+    padding: 0;
+    line-height: 1.4rem;
+    font-size: 1rem;
+  }
+  /* .optionsSection {
+    margin: 0;
+    padding: 0;
+  } */
+  .answerChoices {
+    margin: 0;
+  }
+  .lobby {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: auto;
+    padding: 0.2rem;
+    margin: 0;
+    line-height: 0.6rem;
+    font-size: 0.9rem;
+  }
+  .lobby input {
+    width: 65%;
+    padding: 0.2rem 0;
+    margin: 0.3rem 0.6rem;
+  }
+  /* .lobby input:first-of-type {
+    margin-right: 9rem;
+  } */
+  .mainLogo {
+    padding: 0;
+    max-height: 4.6rem;
+  }
+  .lobby button {
+    margin: 0.5rem 0;
+  }
+  .navbar ul > li:first-of-type {
+    margin-right: 30%;
+  }
+  /* .quizPage h2 {
+    line-height: 1rem;
+  } */
 }
