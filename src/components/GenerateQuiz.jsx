@@ -63,12 +63,15 @@ export default function GenerateQuiz() {
           setUsers(allUsers);
         } else {
           setQuestions(data.map((el) => JSON.parse(el)));
-          // if(response !== undefined || response.length > 1){
-          //   const resp3 = await fetch(`http://localhost:5000/users/${response[1].trim()}`)
-          //   const otherUsers = await resp3.json()
-          //   console.log(otherUsers)
-          //   setUsers(prevArr => [...prevArr, otherUsers])
-          // }
+          if (response !== undefined || response.split(" ").length >= 2) {
+            console.log(response.split(" ")[1]);
+            const resp3 = await fetch(
+              `http://localhost:8000/users/${response.split(" ")[1].trim()}`
+            );
+            const otherUsers = await resp3.json();
+            console.log("otherUsers " + otherUsers);
+            setUsers(otherUsers);
+          }
         }
       } catch (error) {
         console.error(error);
@@ -137,23 +140,23 @@ export default function GenerateQuiz() {
   // console.log(answers);
   // console.log(questions);
   // console.log(questions[0]);
-  // useEffect(() =>{
-  //   //   async function getUsers(){
-  //   //     try{
-  //   //     console.log('updated Lobby code' + lobbyCode)
-  //   //     if(updatedLobby !== undefined){
-  //   //       const resp = await fetch(`http://localhost:5000/users/${lobbyCode}`)
-  //   //       const users = await resp.json()
-  //   //       setUsers(users)
-  //   //     }
-  //   //     }catch(err){
-  //   //     console.log(err)
-  //   //   }
-  //   // }
-  //   // getUsers()
-  //   setUpdatedLobby(prev => lobbyCode)
-  //   console.log('updated Lobby code' + lobbyCode)
-  // }, [lobbyCode])
+  // useEffect(() => {
+  //   async function getUsers() {
+  //     try {
+  //       console.log("updated Lobby code" + lobbyCode);
+  //       if (updatedLobby !== undefined) {
+  //         const resp = await fetch(`http://localhost:5000/users/${lobbyCode}`);
+  //         const users = await resp.json();
+  //         setUsers(users);
+  //       }
+  //     } catch (err) {
+  //       console.log(err);
+  //     }
+  //   }
+  //   getUsers();
+  //   setUpdatedLobby(lobbyCode);
+  //   console.log("updated Lobby code" + lobbyCode);
+  // }, [newUser]);
 
   return (
     <>
