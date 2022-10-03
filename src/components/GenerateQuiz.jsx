@@ -43,9 +43,9 @@ export default function GenerateQuiz() {
   //  ,[response])
   let url;
   if (joiningQuiz == true) {
-    url = `http://localhost:8000/joinquiz/${lobbyCode}`;
+    url = `http://localhost:5000/joinquiz/${lobbyCode}`;
   } else if (operation !== undefined) {
-    url = "http://localhost:8000/quiz/" + operation.toLowerCase();
+    url = "http://localhost:5000/quiz/" + operation.toLowerCase();
   }
   useEffect(() => {
     async function getQuestionData() {
@@ -56,9 +56,9 @@ export default function GenerateQuiz() {
         //  console.log( data.forEach(obj => obj = JSON.parse(obj)))
         // const newData = await data.forEach(obj => console.log(JSON.parse(obj)))
         // console.log(newData)
-        if (url == `http://localhost:8000/joinquiz/${lobbyCode}`) {
+        if (url == `http://localhost:5000/joinquiz/${lobbyCode}`) {
           setQuestions(data);
-          const resp2 = await fetch(`http://localhost:8000/users/${lobbyCode}`);
+          const resp2 = await fetch(`http://localhost:5000/users/${lobbyCode}`);
           const allUsers = await resp2.json();
           setUsers(allUsers);
         } else {
