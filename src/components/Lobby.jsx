@@ -17,15 +17,21 @@ export default function Lobby({ message, users, currentLobby, newUser }) {
   useEffect(() => {
     //only getting message when new user starts brand new lobby
     if (message !== undefined && message.length >= 2) {
-      setUsersInLobby(users);
+      if (users == "undefined") {
+        setUsersInLobby((prevArr) => [
+          ...prevArr,
+          { quizSubmitted: false, username: message[0] },
+        ]);
+      }
       console.log(usersInLobby);
       setLobbyCode(message[1]);
     }
   }, [message]);
   // console.log("there are " + users.length + " users");
 
+  // (message == undefined || message.length < 2)
   useEffect(() => {
-    if (users !== undefined && (message == undefined || message.length < 2)) {
+    if (users !== undefined) {
       setUsersInLobby(users);
     }
     // } else if (
@@ -39,16 +45,16 @@ export default function Lobby({ message, users, currentLobby, newUser }) {
 
   console.log(usersInLobby);
   useEffect(() => {
+    console.log("new user is: " + newUser);
+    console.log("Users are: " + users);
     if (newUser !== undefined && users.length === usersInLobby.length) {
       setUsersInLobby((prevArr) => [
         ...prevArr,
         { username: newUser, quizSubmitted: false },
       ]);
       // navigate('')
-    } else if (
-      newUser !== undefined &&
-      users[users.length - 1].username === newUser
-    ) {
+    } else if (newUser !== undefined && users[users.length - 1] !== undefined) {
+      console.log(users[users.length - 1]);
       setUsersInLobby(users);
     }
   }, [newUser]);
@@ -108,7 +114,7 @@ export default function Lobby({ message, users, currentLobby, newUser }) {
       ) : (
         <div>
           <p>Lobby Code: {lobbyCode}</p>
-          {usersInLobby.length >= 1 && (
+          {usersInLobby.length > 1 && (
             <section className="users">
               Users in Lobby:{" "}
               {usersInLobby.map((user) => (
@@ -118,14 +124,13 @@ export default function Lobby({ message, users, currentLobby, newUser }) {
               ))}
             </section>
           )}
-          {/* <div>
-          {
-          usersInLobby.length === 1 &&
-          <section className="users">
-           <p> Users in Lobby: {message[0].toUpperCase()} </p>
-          </section>
-         }
-          </div> */}
+          <div>
+            {usersInLobby.length === 1 && (
+              <section className="users">
+                <p> Users in Lobby: {message[0].toUpperCase()} </p>
+              </section>
+            )}
+          </div>
           <button onClick={handleLeave}>Leave Lobby</button>
         </div>
       )}

@@ -63,10 +63,14 @@ export default function GenerateQuiz() {
           setUsers(allUsers);
         } else {
           setQuestions(data.map((el) => JSON.parse(el)));
-          if (response !== undefined || response.split(" ").length >= 2) {
-            console.log(response.split(" ")[1]);
+          let lobbyCodeStr = response.split(" ")[1];
+          if (
+            (response !== undefined || response.split(" ").length >= 2) &&
+            lobbyCodeStr !== undefined
+          ) {
+            console.log("this is the lobbyCode " + lobbyCodeStr);
             const resp3 = await fetch(
-              `http://localhost:8000/users/${response.split(" ")[1].trim()}`
+              `http://localhost:8000/users/${lobbyCodeStr}`
             );
             const otherUsers = await resp3.json();
             console.log("otherUsers " + otherUsers);
@@ -80,11 +84,29 @@ export default function GenerateQuiz() {
     getQuestionData();
   }, []);
 
-  // useEffect(() =>{
-  //   if(response != " " && response !== undefined){
-  //     socket.emit('quiz_start', {msg: response.split(' ')[1], quiz: questions})
-  //   }
-  // }, [response])
+  useEffect(() => {
+    let lobbyCodeStr = response.split(" ")[1];
+    async function refetch() {
+      try {
+        if (
+          (response !== undefined || response.split(" ").length >= 2) &&
+          lobbyCodeStr !== undefined
+        ) {
+          console.log("this is the lobbyCode " + lobbyCodeStr);
+          const resp3 = await fetch(
+            `http://localhost:8000/users/${lobbyCodeStr}`
+          );
+          const otherUsers = await resp3.json();
+          console.log("otherUsers " + otherUsers);
+          setUsers(otherUsers);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    refetch();
+  }, [newUser]);
+
   if (response != " " && response !== undefined && response !== "") {
     socket.emit("quiz_start", { msg: response.split(" ")[1], quiz: questions });
   }
