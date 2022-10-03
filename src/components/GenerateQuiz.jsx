@@ -1,46 +1,93 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { v4 as uuid } from "uuid";
 import Lobby from "./Lobby";
 import { useLocation } from "react-router-dom";
-
+import { SocketContext } from "../context/socket";
 
 export default function GenerateQuiz() {
+  const socket = useContext(SocketContext);
   const location = useLocation();
   // const url = "https://cryptic-brook-96547.herokuapp.com/quiz";
-  const { operation } = location.state;
-  console.log(operation);
+  const { operation, joiningQuiz, lobbyCode } = location.state;
+  //
+  const [newUser, setNewUser] = useState("");
+  // console.log('lobby code',lobbyCode)
+
   const [questions, setQuestions] = useState([
     { question: "", rightAnswer: "", operand: "", answerChoices: {} },
   ]);
+  const [response, setResponse] = useState("");
   const [index, setIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [answers, setAnswers] = useState({});
   const [isSubmitted, setSubmitted] = useState(false);
+  const [users, setUsers] = useState([]);
+  const [userLeft, setUserLeft] = useState("false");
   const [indexCorrectAnswers, setIndexCorrectAnswers] = useState([]);
+  socket.on("message", (msg) => {
+    let strArr = msg.split(" ");
+    console.log("message " + msg);
+    if (strArr.length <= 2) {
+      setResponse(msg);
+    } else if (strArr.includes("joined")) {
+      setNewUser(msg.split(" ")[0]);
+    } else if (strArr.includes("left")) {
+      setUserLeft("true");
+    }
+  });
+  console.log("new user? " + newUser);
+  //  console.log('this is response', response)
+  //  console.log('lobby code ' + updatedLobby)
+  //  useEffect(() =>
+  //  setUpdatedLobby(prevValue => response.split('')[1])
+  //  ,[response])
+  let url;
+  if (joiningQuiz == true) {
+    url = `http://localhost:8000/joinquiz/${lobbyCode}`;
+  } else if (operation !== undefined) {
+    url = "http://localhost:8000/quiz/" + operation.toLowerCase();
+  }
   useEffect(() => {
     async function getQuestionData() {
       try {
-        const response = await fetch(
-          "https://math-app-api.onrender.com/quiz?operation=" +
-            operation.toLowerCase()
-        );
-        const data = await response.json();
-        setQuestions(data);
+        const resp = await fetch(url);
+        const data = await resp.json();
+        // console.log(data)
+        //  console.log( data.forEach(obj => obj = JSON.parse(obj)))
+        // const newData = await data.forEach(obj => console.log(JSON.parse(obj)))
+        // console.log(newData)
+        if (url == `http://localhost:8000/joinquiz/${lobbyCode}`) {
+          setQuestions(data);
+          const resp2 = await fetch(`http://localhost:8000/users/${lobbyCode}`);
+          const allUsers = await resp2.json();
+          setUsers(allUsers);
+        } else {
+          setQuestions(data.map((el) => JSON.parse(el)));
+          if (response !== undefined || response.split(" ").length >= 2) {
+            console.log(response.split(" ")[1]);
+            const resp3 = await fetch(
+              `http://localhost:8000/users/${response.split(" ")[1].trim()}`
+            );
+            const otherUsers = await resp3.json();
+            console.log("otherUsers " + otherUsers);
+            setUsers(otherUsers);
+          }
+        }
       } catch (error) {
         console.error(error);
       }
     }
-    // fetch(
-    //   "https://cryptic-brook-96547.herokuapp.com/quiz?operation=" + operation
-    // )
-    //   .then((response) => response.json())
-    //   .then((data) => setQuestions(data))
-    //   .catch((err) => console.error(err));
-    // setQuestions(data);
     getQuestionData();
   }, []);
-  // console.log(questions);
 
+  // useEffect(() =>{
+  //   if(response != " " && response !== undefined){
+  //     socket.emit('quiz_start', {msg: response.split(' ')[1], quiz: questions})
+  //   }
+  // }, [response])
+  if (response != " " && response !== undefined && response !== "") {
+    socket.emit("quiz_start", { msg: response.split(" ")[1], quiz: questions });
+  }
   function decreaseIndex() {
     setIndex((prevIndex) => {
       if (prevIndex !== 0) {
@@ -75,6 +122,7 @@ export default function GenerateQuiz() {
 
   function submitQuiz() {
     setSubmitted(true);
+
     let count = 0;
     for (let i = 0; i < questions.length; i++) {
       if (answers[i] && answers[i] == questions[i].rightAnswer) {
@@ -84,17 +132,41 @@ export default function GenerateQuiz() {
     }
     // console.log(answers);
     setScore(count);
-    console.log(score);
-    console.log(count);
+    // console.log(score);
+    // console.log(count);
+    socket.emit("submit_quiz", { user: response.split(" ")[0], score: count });
   }
   // console.log(indexCorrectAnswers);
   // console.log(answers);
   // console.log(questions);
   // console.log(questions[0]);
+  // useEffect(() => {
+  //   async function getUsers() {
+  //     try {
+  //       console.log("updated Lobby code" + lobbyCode);
+  //       if (updatedLobby !== undefined) {
+  //         const resp = await fetch(`http://localhost:5000/users/${lobbyCode}`);
+  //         const users = await resp.json();
+  //         setUsers(users);
+  //       }
+  //     } catch (err) {
+  //       console.log(err);
+  //     }
+  //   }
+  //   getUsers();
+  //   setUpdatedLobby(lobbyCode);
+  //   console.log("updated Lobby code" + lobbyCode);
+  // }, [newUser]);
+
   return (
     <>
       <section className="quizPage">
-        <Lobby />
+        <Lobby
+          message={response.split(" ")}
+          users={users}
+          currentLobby={lobbyCode}
+          newUser={newUser}
+        />
         <section className="quizSection">
           {questions.length <= 1 ? (
             <img
@@ -139,7 +211,7 @@ export default function GenerateQuiz() {
                         {isSubmitted &&
                           answers[index] ==
                             questions[index].answerChoices[answerOptions] && (
-                            <p className="selectedText">You picked</p>
+                            <span className="selectedText">You picked</span>
                           )}
                       </p>
                     ))}
@@ -147,11 +219,21 @@ export default function GenerateQuiz() {
               </section>
               <div className="quizButtons">
                 {index > 0 ? (
-                  <img
-                    className="backButton"
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth="1.5"
+                    stroke="black"
+                    class="w-6 h-6"
                     onClick={decreaseIndex}
-                    src="https://raw.githubusercontent.com/leahthompson01/MathApp/main/public/icons8-back-64.png"
-                  ></img>
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M18.75 19.5l-7.5-7.5 7.5-7.5m-6 15L5.25 12l7.5-7.5"
+                    />
+                  </svg>
                 ) : (
                   <img
                     className="hidden"
@@ -169,11 +251,22 @@ export default function GenerateQuiz() {
                   </section>
                 )}
                 {index < questions.length - 1 ? (
-                  <img
-                    className="forwardButton"
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="black"
+                    className="w-6 h-6 forwardButton"
                     onClick={increaseIndex}
-                    src="https://github.com/leahthompson01/MathApp/blob/main/public/icons8-forward-64.png?raw=true"
-                  ></img>
+                    // className="forwardButton"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M11.25 4.5l7.5 7.5-7.5 7.5m-6-15l7.5 7.5-7.5 7.5"
+                    />
+                  </svg>
                 ) : (
                   <img
                     className="hidden"
