@@ -15,7 +15,9 @@ export default function ChoiceScreen() {
     socket.emit("create_room", { username: username, operation: operation });
 
     console.log("trying to join room");
-    navigate("/MathApp/quiz", { state: { operation: `${operation}` } });
+    navigate("/MathApp/quiz", {
+      state: { operation: `${operation}`, currentUser: username },
+    });
   }
   // console.log(username)
   return (

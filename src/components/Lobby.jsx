@@ -3,8 +3,14 @@ import { SocketContext } from "../context/socket";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuid } from "uuid";
 
-export default function Lobby({ message, users, currentLobby, newUser }) {
-  console.log("message " + message);
+export default function Lobby({
+  message,
+  users,
+  currentLobby,
+  newUser,
+  currentUser,
+}) {
+  // console.log("message " + message);
   // console.log(users)
   // console.log('current Lobby '+currentLobby)
   // console.log('new user is '+ newUser)
@@ -23,7 +29,8 @@ export default function Lobby({ message, users, currentLobby, newUser }) {
           { quizSubmitted: false, username: message[0] },
         ]);
       }
-      console.log(usersInLobby);
+      // console.log(usersInLobby);
+      setUsername(message[0]);
       setLobbyCode(message[1]);
     }
   }, [message]);
@@ -42,8 +49,13 @@ export default function Lobby({ message, users, currentLobby, newUser }) {
     //   setUsersInLobby((prevArr) => [...prevArr, ...users]);
     // }
   }, [users]);
+  useEffect(() => {
+    if (currentUser !== undefined && currentUser !== "") {
+      setUsername(currentUser);
+    }
+  }, [currentUser]);
 
-  console.log(usersInLobby);
+  // console.log(usersInLobby);
   useEffect(() => {
     console.log("new user is: " + newUser);
     console.log("Users are: " + users);
@@ -67,7 +79,8 @@ export default function Lobby({ message, users, currentLobby, newUser }) {
   // console.log(usersInLobby)
   // console.log(lobbyCode)
   function handleLeave() {
-    socket.emit("leave", { username: message[0], room: message[1] });
+    socket.emit("leave", { username: username, room: lobbyCode });
+
     navigate("/MathApp/");
   }
   let quiz;
@@ -77,7 +90,12 @@ export default function Lobby({ message, users, currentLobby, newUser }) {
     event.preventDefault();
 
     navigate("/MathApp/quiz", {
-      state: { joiningQuiz: true, lobbyCode: lobbyCode, users: data },
+      state: {
+        joiningQuiz: true,
+        lobbyCode: lobbyCode,
+        users: data,
+        currentUser: username,
+      },
     });
   }
 

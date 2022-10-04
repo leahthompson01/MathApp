@@ -193,7 +193,7 @@ for css */
   display: grid;
   align-self: center;
   /* padding: 7rem 18rem; */
-  /* margin: 0 4rem; */
+  margin: 0 4rem;
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: repeat(2, 100px);
   grid-gap: 2rem;
