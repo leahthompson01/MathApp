@@ -33,6 +33,8 @@ export default function GenerateQuiz() {
       setNewUser(msg.split(" ")[0]);
     } else if (strArr.includes("left")) {
       setUserLeft("true");
+    } else if (strArr.includes("all")) {
+      console.log("all are done");
     }
   });
   console.log("new user? " + newUser);
