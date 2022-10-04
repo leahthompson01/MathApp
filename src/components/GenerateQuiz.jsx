@@ -8,8 +8,10 @@ export default function GenerateQuiz() {
   const socket = useContext(SocketContext);
   const location = useLocation();
   // const url = "https://cryptic-brook-96547.herokuapp.com/quiz";
-  const { operation, joiningQuiz, lobbyCode, currentUser } = location.state;
+  const { operation, joiningQuiz, lobbyCode, currentUser, creatingQuiz } =
+    location.state;
   //
+  console.log(creatingQuiz);
   const [newUser, setNewUser] = useState("");
   // console.log('lobby code',lobbyCode)
 
@@ -23,31 +25,44 @@ export default function GenerateQuiz() {
   const [isSubmitted, setSubmitted] = useState(false);
   const [users, setUsers] = useState([]);
   const [results, setResults] = useState([]);
+  const [onMessage, setOnMessage] = useState("");
   const [userLeft, setUserLeft] = useState("false");
+  const [triggeredQuizStart, setTriggeredQuizStart] = useState(false);
   const [indexCorrectAnswers, setIndexCorrectAnswers] = useState([]);
   // useEffect(() => {
-  socket.on("message", (msg) => {
-    console.log("this is msg" + msg);
-    let strArr = msg.split(" ");
-    // console.log("message " + msg);
-    if (strArr.length <= 2) {
-      // setResponse(msg.slice(7, msg.length - 1));
-      console.log("here");
-      setResponse(msg);
-    } else if (strArr.includes("joined")) {
-      setNewUser(msg.split(" ")[0]);
-    } else if (strArr.includes("left")) {
-      setUserLeft("true");
-    } else if (strArr.includes("all")) {
-      console.log("all have submitted " + msg);
+  console.log("setting on Message", socket._callbacks?.["$message"]);
+  if (socket._callbacks?.["$message"] == undefined) {
+    socket.on("message", (msg) => {
+      setMsg(msg);
+      console.log("this is msg" + msg);
+      let strArr = msg.split(" ");
+      // console.log("message " + msg);
+      if (strArr.length == 2) {
+        // setResponse(msg.slice(7, msg.length - 1));
+        console.log("here");
+        setResponse(msg);
+      } else if (strArr.includes("joined")) {
+        setNewUser(msg.split(" ")[0]);
+      } else if (strArr.includes("left")) {
+        setUserLeft("true");
+      }
+
+      // console.log("all have submitted " + msg);
       // console.log(strArr[strArr.length - 1].join(""));
       // const newArr = strArr[1].split(",").map((str) => str.split(":"));
 
       // console.log("newArr: " + newArr);
-      setResults([lee, 5]);
-    }
+      // }
+    });
+  }
+  // }, [joiningQuiz, creatingQuiz]);
+  socket.on("all_submit", (data) => data.forEach((obj) => console.log(obj)));
+  socket.on("blank_quiz", () => {
+    socket.emit("quiz_start", {
+      msg: response.split(" ")[1],
+      quiz: questions,
+    });
   });
-  // }, []);
   // socket.on("message", (msg) => {
   //   let strArr = msg.split(" ");
   //   console.log("message " + msg);
@@ -114,7 +129,7 @@ export default function GenerateQuiz() {
       }
     }
     getQuestionData();
-  }, []);
+  }, [response, lobbyCode]);
 
   useEffect(() => {
     let lobbyCodeStr = response.split(" ")[1];
@@ -138,16 +153,24 @@ export default function GenerateQuiz() {
     }
     refetch();
   }, [newUser]);
-  // useEffect(() => {
-  if (response != " " && response !== undefined && response !== "") {
-    if (!isSubmitted) {
+  useEffect(() => {
+    if (
+      response != " " &&
+      response !== undefined &&
+      response !== "" &&
+      creatingQuiz == true &&
+      triggeredQuizStart == false
+    ) {
+      // if (!isSubmitted) {
+      // setTriggeredQuizStart(true);
       socket.emit("quiz_start", {
         msg: response.split(" ")[1],
         quiz: questions,
       });
+      // }
     }
-  }
-  // }, [response]);
+  }, [questions]);
+  // }, [response, newUser,]);
   // if (response != " " && response !== undefined && response !== "") {
   //   if (!isSubmitted) {
   //     socket.emit("quiz_start", {
@@ -249,120 +272,120 @@ export default function GenerateQuiz() {
           newUser={newUser}
           currentUser={currentUser}
         />
-        {results.length <= 1 && (
-          <section className="quizSection">
-            {questions.length <= 1 ? (
-              <img
-                className="loadingGif"
-                src="https://media.giphy.com/media/3o7bu3XilJ5BOiSGic/giphy.gif"
-              ></img>
-            ) : (
-              <div className="questionsContainer">
-                {isSubmitted && <p className="score">Your Score is {score}</p>}
-                <h2>{questions[index].question}</h2>
+        {/* {results.length <= 1 && */}
 
-                <section className="middleContainer">
-                  <section className="answerChoices">
-                    {Object.keys(questions[index].answerChoices)
-                      .sort(
-                        (a, b) =>
-                          questions[index].answerChoices[a] -
-                          questions[index].answerChoices[b]
-                      )
-                      .map((answerOptions) => (
-                        <p
-                          key={uuid()}
-                          onClick={selectAnswer}
-                          className={
-                            answers[index] ==
-                            questions[index].answerChoices[answerOptions]
-                              ? isSubmitted
-                                ? questions[index].answerChoices[
-                                    answerOptions
-                                  ] == questions[index].rightAnswer
-                                  ? "rightAnswer selectedAnswer indivAnswerOption"
-                                  : "wrongAnswer selectedAnswer indivAnswerOption"
-                                : "indivAnswerOption selectedAnswer nonSubmitted"
-                              : isSubmitted
+        <section className="quizSection">
+          {questions.length <= 1 ? (
+            <img
+              className="loadingGif"
+              src="https://media.giphy.com/media/3o7bu3XilJ5BOiSGic/giphy.gif"
+            ></img>
+          ) : (
+            <div className="questionsContainer">
+              {isSubmitted && <p className="score">Your Score is {score}</p>}
+              <h2>{questions[index].question}</h2>
+
+              <section className="middleContainer">
+                <section className="answerChoices">
+                  {Object.keys(questions[index].answerChoices)
+                    .sort(
+                      (a, b) =>
+                        questions[index].answerChoices[a] -
+                        questions[index].answerChoices[b]
+                    )
+                    .map((answerOptions) => (
+                      <p
+                        key={uuid()}
+                        onClick={selectAnswer}
+                        className={
+                          answers[index] ==
+                          questions[index].answerChoices[answerOptions]
+                            ? isSubmitted
                               ? questions[index].answerChoices[answerOptions] ==
                                 questions[index].rightAnswer
-                                ? "rightAnswer indivAnswerOption"
-                                : "wrongAnswer indivAnswerOption"
-                              : "indivAnswerOption"
-                          }
-                        >
-                          {questions[index].answerChoices[answerOptions]}
-                          {isSubmitted &&
-                            answers[index] ==
-                              questions[index].answerChoices[answerOptions] && (
-                              <span className="selectedText">You picked</span>
-                            )}
-                        </p>
-                      ))}
-                  </section>
+                                ? "rightAnswer selectedAnswer indivAnswerOption"
+                                : "wrongAnswer selectedAnswer indivAnswerOption"
+                              : "indivAnswerOption selectedAnswer nonSubmitted"
+                            : isSubmitted
+                            ? questions[index].answerChoices[answerOptions] ==
+                              questions[index].rightAnswer
+                              ? "rightAnswer indivAnswerOption"
+                              : "wrongAnswer indivAnswerOption"
+                            : "indivAnswerOption"
+                        }
+                      >
+                        {questions[index].answerChoices[answerOptions]}
+                        {isSubmitted &&
+                          answers[index] ==
+                            questions[index].answerChoices[answerOptions] && (
+                            <span className="selectedText">You picked</span>
+                          )}
+                      </p>
+                    ))}
                 </section>
-                <div className="quizButtons">
-                  {index > 0 ? (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth="1.5"
-                      stroke="black"
-                      className="w-6 h-6"
-                      onClick={decreaseIndex}
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M18.75 19.5l-7.5-7.5 7.5-7.5m-6 15L5.25 12l7.5-7.5"
-                      />
-                    </svg>
-                  ) : (
+              </section>
+              <div className="quizButtons">
+                {index > 0 ? (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth="1.5"
+                    stroke="black"
+                    className="w-6 h-6"
+                    onClick={decreaseIndex}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M18.75 19.5l-7.5-7.5 7.5-7.5m-6 15L5.25 12l7.5-7.5"
+                    />
+                  </svg>
+                ) : (
+                  <img
+                    className="hidden"
+                    onClick={decreaseIndex}
+                    src="https://raw.githubusercontent.com/leahthompson01/MathApp/main/public/icons8-back-64.png"
+                  ></img>
+                )}
+                {!isSubmitted && Object.keys(answers).length > 9 && (
+                  <section className="submitSection" onClick={submitQuiz}>
                     <img
-                      className="hidden"
-                      onClick={decreaseIndex}
-                      src="https://raw.githubusercontent.com/leahthompson01/MathApp/main/public/icons8-back-64.png"
-                    ></img>
-                  )}
-                  {!isSubmitted && Object.keys(answers).length > 9 && (
-                    <section className="submitSection" onClick={submitQuiz}>
-                      <img
-                        className="submitButton"
-                        src="https://raw.githubusercontent.com/leahthompson01/MathApp/main/public/icons8-quiz-64.png"
-                      />
-                      <h3>Submit Quiz</h3>
-                    </section>
-                  )}
-                  {index < questions.length - 1 ? (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={1.5}
-                      stroke="black"
-                      className="w-6 h-6 forwardButton"
-                      onClick={increaseIndex}
-                      // className="forwardButton"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M11.25 4.5l7.5 7.5-7.5 7.5m-6-15l7.5 7.5-7.5 7.5"
-                      />
-                    </svg>
-                  ) : (
-                    <img
-                      className="hidden"
-                      onClick={increaseIndex}
-                      src="https://github.com/leahthompson01/MathApp/blob/main/public/icons8-forward-64.png?raw=true"
-                    ></img>
-                  )}
-                </div>
+                      className="submitButton"
+                      src="https://raw.githubusercontent.com/leahthompson01/MathApp/main/public/icons8-quiz-64.png"
+                    />
+                    <h3>Submit Quiz</h3>
+                  </section>
+                )}
+                {index < questions.length - 1 ? (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="black"
+                    className="w-6 h-6 forwardButton"
+                    onClick={increaseIndex}
+                    // className="forwardButton"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M11.25 4.5l7.5 7.5-7.5 7.5m-6-15l7.5 7.5-7.5 7.5"
+                    />
+                  </svg>
+                ) : (
+                  <img
+                    className="hidden"
+                    onClick={increaseIndex}
+                    src="https://github.com/leahthompson01/MathApp/blob/main/public/icons8-forward-64.png?raw=true"
+                  ></img>
+                )}
               </div>
-            )}
-          </section>
-        )}
+            </div>
+          )}
+        </section>
+
         {results.length > 1 && (
           <div>
             {results
