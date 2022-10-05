@@ -31,33 +31,34 @@ export default function GenerateQuiz() {
   const [indexCorrectAnswers, setIndexCorrectAnswers] = useState([]);
   // useEffect(() => {
   // console.log("setting on Message", socket._callbacks?.["$message"]);
-  if (socket._callbacks?.["$message"] == undefined) {
-    socket.on("message", (msg) => {
-      setMsg(msg);
-      console.log("this is msg" + msg);
-      let strArr = msg.split(" ");
-      // console.log("message " + msg);
-      if (strArr.length == 2) {
-        // setResponse(msg.slice(7, msg.length - 1));
-        console.log("here");
-        setResponse(msg);
-      } else if (strArr.includes("joined")) {
-        setNewUser(msg.split(" ")[0]);
-      } else if (strArr.includes("left")) {
-        setUserLeft("true");
-      }
+  // if (socket._callbacks?.["$message"] == undefined) {
+  socket.on("message", (msg) => {
+    // setMsg(msg);
+    // console.log("this is msg" + msg);
+    let strArr = msg.split(" ");
+    console.log("message ", strArr);
+    if (strArr.length <= 2) {
+      // setResponse(msg.slice(7, msg.length - 1));
+      console.log("msg", msg);
+      setResponse(msg);
+    } else if (strArr.includes("joined")) {
+      setNewUser(msg.split(" ")[0]);
+    } else if (strArr.includes("left")) {
+      setUserLeft("true");
+    }
 
-      // console.log("all have submitted " + msg);
-      // console.log(strArr[strArr.length - 1].join(""));
-      // const newArr = strArr[1].split(",").map((str) => str.split(":"));
+    // console.log("all have submitted " + msg);
+    // console.log(strArr[strArr.length - 1].join(""));
+    // const newArr = strArr[1].split(",").map((str) => str.split(":"));
 
-      // console.log("newArr: " + newArr);
-      // }
-    });
-  }
+    // console.log("newArr: " + newArr);
+    // }
+  });
+  console.log("response", response);
+  // }
   // }, [joiningQuiz, creatingQuiz]);
   if (socket._callbacks?.["$all_submit"] == undefined) {
-    socket.on("all_submit", (data) => data.forEach((obj) => console.log(obj)));
+    socket.on("all_submit", (data) => console.log(data));
   }
   console.log("all submit", socket._callbacks?.["all_submit"]);
   console.log("blank quiz", socket._callbacks?.["$blank_quiz"]);
@@ -159,23 +160,19 @@ export default function GenerateQuiz() {
     }
     refetch();
   }, [newUser]);
-  useEffect(() => {
-    if (
-      response != " " &&
-      response !== undefined &&
-      response !== "" &&
-      creatingQuiz == true &&
-      triggeredQuizStart == false
-    ) {
-      // if (!isSubmitted) {
-      // setTriggeredQuizStart(true);
-      socket.emit("quiz_start", {
-        msg: response.split(" ")[1],
-        quiz: questions,
-      });
-      // }
-    }
-  }, [questions]);
+  // useEffect(() => {
+  // if (socket._callbacks?.["$all_submit"] == undefined) {
+  if (response != " " && response !== undefined && response !== "") {
+    // if (!isSubmitted) {
+    // setTriggeredQuizStart(true);
+    socket.emit("quiz_start", {
+      msg: response.split(" ")[1],
+      quiz: questions,
+    });
+    // }
+  }
+  // }
+  // }, [questions]);
   // }, [response, newUser,]);
   // if (response != " " && response !== undefined && response !== "") {
   //   if (!isSubmitted) {
