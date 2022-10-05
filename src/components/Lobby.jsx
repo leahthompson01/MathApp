@@ -38,17 +38,19 @@ export default function Lobby({ message, users, currentLobby, newUser }) {
   }, [users]);
 
   console.log(usersInLobby);
+  console.log('all the users are: ' + users)
+  // console.log('this is user.username: ' + user[1].username)
   useEffect(() => {
     if (newUser !== undefined && users.length === usersInLobby.length) {
+      // console.log('this is user.username: ' + user[1].username)
       setUsersInLobby((prevArr) => [
         ...prevArr,
         { username: newUser, quizSubmitted: false },
       ]);
-      // navigate('')
-    } else if (
-      newUser !== undefined &&
-      users[users.length - 1].username === newUser
+    }else if (
+      newUser !== undefined && users !== undefined 
     ) {
+      console.log('this is the last user: '+ users[users.length - 1])
       setUsersInLobby(users);
     }
   }, [newUser]);

@@ -63,10 +63,11 @@ export default function GenerateQuiz() {
           setUsers(allUsers);
         } else {
           setQuestions(data.map((el) => JSON.parse(el)));
-          if (response !== undefined || response.split(" ").length >= 2) {
-            console.log(response.split(" ")[1]);
+          let lobbyCodeString = response.split(' ')[1]
+          if (response !== undefined && lobbyCodeString !== undefined) {
+            console.log(lobbyCodeString);
             const resp3 = await fetch(
-              `http://localhost:8000/users/${response.split(" ")[1].trim()}`
+              `http://localhost:8000/users/${lobbyCodeString}`
             );
             const otherUsers = await resp3.json();
             console.log("otherUsers " + otherUsers);
