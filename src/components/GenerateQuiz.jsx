@@ -30,7 +30,7 @@ export default function GenerateQuiz() {
   const [triggeredQuizStart, setTriggeredQuizStart] = useState(false);
   const [indexCorrectAnswers, setIndexCorrectAnswers] = useState([]);
   // useEffect(() => {
-  console.log("setting on Message", socket._callbacks?.["$message"]);
+  // console.log("setting on Message", socket._callbacks?.["$message"]);
   if (socket._callbacks?.["$message"] == undefined) {
     socket.on("message", (msg) => {
       setMsg(msg);
@@ -56,13 +56,19 @@ export default function GenerateQuiz() {
     });
   }
   // }, [joiningQuiz, creatingQuiz]);
-  socket.on("all_submit", (data) => data.forEach((obj) => console.log(obj)));
-  socket.on("blank_quiz", () => {
-    socket.emit("quiz_start", {
-      msg: response.split(" ")[1],
-      quiz: questions,
+  if (socket._callbacks?.["$all_submit"] == undefined) {
+    socket.on("all_submit", (data) => data.forEach((obj) => console.log(obj)));
+  }
+  console.log("all submit", socket._callbacks?.["all_submit"]);
+  console.log("blank quiz", socket._callbacks?.["$blank_quiz"]);
+  if (socket._callbacks?.["$blank_quiz"] == undefined) {
+    socket.on("blank_quiz", () => {
+      socket.emit("quiz_start", {
+        msg: response.split(" ")[1],
+        quiz: questions,
+      });
     });
-  });
+  }
   // socket.on("message", (msg) => {
   //   let strArr = msg.split(" ");
   //   console.log("message " + msg);
