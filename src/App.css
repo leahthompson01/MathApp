@@ -317,11 +317,11 @@ for css */
 .lobby p {
   width: 100%;
 }
-.lobby input {
+/* .lobby input {
   width: 100%;
   padding: 1rem 0;
   margin-bottom: 1rem;
-}
+} */
 .quizSection,
 .optionsSection {
   display: flex;
@@ -352,6 +352,19 @@ for css */
   width: 50%;
   /* display: block; */
 }
+.scores {
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  width: 45%;
+  height: auto;
+  margin: 2rem auto;
+  padding: 0.6rem 0;
+  border-radius: 15px;
+  background-color: rgb(71, 71, 71, 0.2);
+  color: black;
+}
+
 @media only screen and (max-width: 800px) {
   .quizPage,
   .optionsPage,

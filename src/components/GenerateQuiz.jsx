@@ -58,7 +58,10 @@ export default function GenerateQuiz() {
   // }
   // }, [joiningQuiz, creatingQuiz]);
   if (socket._callbacks?.["$all_submit"] == undefined) {
-    socket.on("all_submit", (data) => console.log(data));
+    socket.on("all_submit", (data) => {
+      console.log("data", data);
+      setResults(data.split(",").map((el) => el.split(":")));
+    });
   }
   console.log("all submit", socket._callbacks?.["all_submit"]);
   console.log("blank quiz", socket._callbacks?.["$blank_quiz"]);
@@ -160,17 +163,18 @@ export default function GenerateQuiz() {
     }
     refetch();
   }, [newUser]);
-  // useEffect(() => {
-  // if (socket._callbacks?.["$all_submit"] == undefined) {
-  if (response != " " && response !== undefined && response !== "") {
-    // if (!isSubmitted) {
-    // setTriggeredQuizStart(true);
-    socket.emit("quiz_start", {
-      msg: response.split(" ")[1],
-      quiz: questions,
-    });
+  useEffect(() => {
+    // if (socket._callbacks?.["$all_submit"] == undefined) {
+    if (response != " " && response !== undefined && response !== "") {
+      // if (!isSubmitted) {
+      // setTriggeredQuizStart(true);
+      socket.emit("quiz_start", {
+        msg: response.split(" ")[1],
+        quiz: questions,
+      });
+    }
     // }
-  }
+  }, [questions]);
   // }
   // }, [questions]);
   // }, [response, newUser,]);
@@ -264,7 +268,8 @@ export default function GenerateQuiz() {
   //   setUpdatedLobby(lobbyCode);
   //   console.log("updated Lobby code" + lobbyCode);
   // }, [newUser]);
-
+  console.log("this is results ", results);
+  console.log(results[0]);
   return (
     <>
       <section className="quizPage">
@@ -275,127 +280,132 @@ export default function GenerateQuiz() {
           newUser={newUser}
           currentUser={currentUser}
         />
-        {/* {results.length <= 1 && */}
+        {(results[0] == "" || results[0] == undefined) && (
+          <section className="quizSection">
+            {questions.length <= 1 ? (
+              <img
+                className="loadingGif"
+                src="https://media.giphy.com/media/3o7bu3XilJ5BOiSGic/giphy.gif"
+              ></img>
+            ) : (
+              <div className="questionsContainer">
+                {isSubmitted && <p className="score">Your Score is {score}</p>}
+                <h2>{questions[index].question}</h2>
 
-        <section className="quizSection">
-          {questions.length <= 1 ? (
-            <img
-              className="loadingGif"
-              src="https://media.giphy.com/media/3o7bu3XilJ5BOiSGic/giphy.gif"
-            ></img>
-          ) : (
-            <div className="questionsContainer">
-              {isSubmitted && <p className="score">Your Score is {score}</p>}
-              <h2>{questions[index].question}</h2>
-
-              <section className="middleContainer">
-                <section className="answerChoices">
-                  {Object.keys(questions[index].answerChoices)
-                    .sort(
-                      (a, b) =>
-                        questions[index].answerChoices[a] -
-                        questions[index].answerChoices[b]
-                    )
-                    .map((answerOptions) => (
-                      <p
-                        key={uuid()}
-                        onClick={selectAnswer}
-                        className={
-                          answers[index] ==
-                          questions[index].answerChoices[answerOptions]
-                            ? isSubmitted
+                <section className="middleContainer">
+                  <section className="answerChoices">
+                    {Object.keys(questions[index].answerChoices)
+                      .sort(
+                        (a, b) =>
+                          questions[index].answerChoices[a] -
+                          questions[index].answerChoices[b]
+                      )
+                      .map((answerOptions) => (
+                        <p
+                          key={uuid()}
+                          onClick={selectAnswer}
+                          className={
+                            answers[index] ==
+                            questions[index].answerChoices[answerOptions]
+                              ? isSubmitted
+                                ? questions[index].answerChoices[
+                                    answerOptions
+                                  ] == questions[index].rightAnswer
+                                  ? "rightAnswer selectedAnswer indivAnswerOption"
+                                  : "wrongAnswer selectedAnswer indivAnswerOption"
+                                : "indivAnswerOption selectedAnswer nonSubmitted"
+                              : isSubmitted
                               ? questions[index].answerChoices[answerOptions] ==
                                 questions[index].rightAnswer
-                                ? "rightAnswer selectedAnswer indivAnswerOption"
-                                : "wrongAnswer selectedAnswer indivAnswerOption"
-                              : "indivAnswerOption selectedAnswer nonSubmitted"
-                            : isSubmitted
-                            ? questions[index].answerChoices[answerOptions] ==
-                              questions[index].rightAnswer
-                              ? "rightAnswer indivAnswerOption"
-                              : "wrongAnswer indivAnswerOption"
-                            : "indivAnswerOption"
-                        }
-                      >
-                        {questions[index].answerChoices[answerOptions]}
-                        {isSubmitted &&
-                          answers[index] ==
-                            questions[index].answerChoices[answerOptions] && (
-                            <span className="selectedText">You picked</span>
-                          )}
-                      </p>
-                    ))}
-                </section>
-              </section>
-              <div className="quizButtons">
-                {index > 0 ? (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth="1.5"
-                    stroke="black"
-                    className="w-6 h-6"
-                    onClick={decreaseIndex}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M18.75 19.5l-7.5-7.5 7.5-7.5m-6 15L5.25 12l7.5-7.5"
-                    />
-                  </svg>
-                ) : (
-                  <img
-                    className="hidden"
-                    onClick={decreaseIndex}
-                    src="https://raw.githubusercontent.com/leahthompson01/MathApp/main/public/icons8-back-64.png"
-                  ></img>
-                )}
-                {!isSubmitted && Object.keys(answers).length > 9 && (
-                  <section className="submitSection" onClick={submitQuiz}>
-                    <img
-                      className="submitButton"
-                      src="https://raw.githubusercontent.com/leahthompson01/MathApp/main/public/icons8-quiz-64.png"
-                    />
-                    <h3>Submit Quiz</h3>
+                                ? "rightAnswer indivAnswerOption"
+                                : "wrongAnswer indivAnswerOption"
+                              : "indivAnswerOption"
+                          }
+                        >
+                          {questions[index].answerChoices[answerOptions]}
+                          {isSubmitted &&
+                            answers[index] ==
+                              questions[index].answerChoices[answerOptions] && (
+                              <span className="selectedText">You picked</span>
+                            )}
+                        </p>
+                      ))}
                   </section>
-                )}
-                {index < questions.length - 1 ? (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="black"
-                    className="w-6 h-6 forwardButton"
-                    onClick={increaseIndex}
-                    // className="forwardButton"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M11.25 4.5l7.5 7.5-7.5 7.5m-6-15l7.5 7.5-7.5 7.5"
-                    />
-                  </svg>
-                ) : (
-                  <img
-                    className="hidden"
-                    onClick={increaseIndex}
-                    src="https://github.com/leahthompson01/MathApp/blob/main/public/icons8-forward-64.png?raw=true"
-                  ></img>
-                )}
+                </section>
+                <div className="quizButtons">
+                  {index > 0 ? (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="1.5"
+                      stroke="black"
+                      className="w-6 h-6"
+                      onClick={decreaseIndex}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M18.75 19.5l-7.5-7.5 7.5-7.5m-6 15L5.25 12l7.5-7.5"
+                      />
+                    </svg>
+                  ) : (
+                    <img
+                      className="hidden"
+                      onClick={decreaseIndex}
+                      src="https://raw.githubusercontent.com/leahthompson01/MathApp/main/public/icons8-back-64.png"
+                    ></img>
+                  )}
+                  {!isSubmitted && Object.keys(answers).length > 9 && (
+                    <section className="submitSection" onClick={submitQuiz}>
+                      <img
+                        className="submitButton"
+                        src="https://raw.githubusercontent.com/leahthompson01/MathApp/main/public/icons8-quiz-64.png"
+                      />
+                      <h3>Submit Quiz</h3>
+                    </section>
+                  )}
+                  {index < questions.length - 1 ? (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="black"
+                      className="w-6 h-6 forwardButton"
+                      onClick={increaseIndex}
+                      // className="forwardButton"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M11.25 4.5l7.5 7.5-7.5 7.5m-6-15l7.5 7.5-7.5 7.5"
+                      />
+                    </svg>
+                  ) : (
+                    <img
+                      className="hidden"
+                      onClick={increaseIndex}
+                      src="https://github.com/leahthompson01/MathApp/blob/main/public/icons8-forward-64.png?raw=true"
+                    ></img>
+                  )}
+                </div>
               </div>
-            </div>
-          )}
-        </section>
-
-        {results.length > 1 && (
-          <div>
+            )}
+          </section>
+        )}
+        {results[0] !== undefined && (
+          <div className="scores">
+            RESULTS
             {results
-              .sort((a, b) => b.score - a.score)
-              .map((arr) => (
-                <div>
-                  <p>User: {arr[0]}</p>
+              .sort((a, b) => a.score - b.score)
+              .map((arr, indx) => (
+                <div key={uuid()}>
+                  {indx == 0 ? (
+                    <p className="winner">WINNER: {arr[0]}</p>
+                  ) : (
+                    <p>User: {arr[0]}</p>
+                  )}
                   <p>Score: {arr[1]}</p>
                 </div>
               ))}
