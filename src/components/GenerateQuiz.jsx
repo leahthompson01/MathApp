@@ -57,12 +57,21 @@ export default function GenerateQuiz() {
   console.log("response", response);
   // }
   // }, [joiningQuiz, creatingQuiz]);
+  // useEffect(() => {
   if (socket._callbacks?.["$all_submit"] == undefined) {
     socket.on("all_submit", (data) => {
       console.log("data", data);
-      setResults(data.split(",").map((el) => el.split(":")));
+      setResults(data.sort((a, b) => b[1] - a[1]));
+      // console.log(results);
     });
   }
+  // }, [socket._callbacks?.["$all_submit"]]);
+  // if (socket._callbacks?.["$all_submit"] == undefined) {
+  //   socket.on("all_submit", (data) => {
+  //     console.log("data", data);
+  //     setResults(data.split(",").map((el) => el.split(":")));
+  //   });
+  // }
   console.log("all submit", socket._callbacks?.["all_submit"]);
   console.log("blank quiz", socket._callbacks?.["$blank_quiz"]);
   if (socket._callbacks?.["$blank_quiz"] == undefined) {
@@ -394,21 +403,19 @@ export default function GenerateQuiz() {
             )}
           </section>
         )}
-        {results[0] !== undefined && (
+        {results[0] !== undefined && results[0].length == 2 && (
           <div className="scores">
             RESULTS
-            {results
-              .sort((a, b) => a.score - b.score)
-              .map((arr, indx) => (
-                <div key={uuid()}>
-                  {indx == 0 ? (
-                    <p className="winner">WINNER: {arr[0]}</p>
-                  ) : (
-                    <p>User: {arr[0]}</p>
-                  )}
-                  <p>Score: {arr[1]}</p>
-                </div>
-              ))}
+            {results.map((arr, indx) => (
+              <div key={uuid()}>
+                {indx == 0 ? (
+                  <p className="winner">WINNER: {arr[0]}</p>
+                ) : (
+                  <p>User: {arr[0]}</p>
+                )}
+                <p>Score: {arr[1]}</p>
+              </div>
+            ))}
           </div>
         )}
       </section>
