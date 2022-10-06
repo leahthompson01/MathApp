@@ -12,10 +12,19 @@ export default function ChoiceScreen() {
     console.log(operation);
     //switched to using useNavigate() instead of Link from react-router-dom
     // here is where code to join room would go
-    socket.emit("create_room", { username: username, operation: operation });
+    socket.emit("create_room", {
+      username: username,
+      operation: operation.toLowerCase(),
+    });
 
     console.log("trying to join room");
-    navigate("/MathApp/quiz", { state: { operation: `${operation}` } });
+    navigate("/MathApp/quiz", {
+      state: {
+        operation: `${operation}`,
+        currentUser: username,
+        creatingQuiz: true,
+      },
+    });
   }
   // console.log(username)
   return (
