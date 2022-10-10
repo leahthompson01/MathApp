@@ -23,46 +23,56 @@ export default function GenerateQuiz() {
   const [score, setScore] = useState(0);
   const [answers, setAnswers] = useState({});
   const [isSubmitted, setSubmitted] = useState(false);
+  const [allSubmitted, setAllSubmitted] = useState(false);
   const [users, setUsers] = useState([]);
   const [results, setResults] = useState([]);
   const [onMessage, setOnMessage] = useState("");
   const [userLeft, setUserLeft] = useState("false");
   const [triggeredQuizStart, setTriggeredQuizStart] = useState(false);
   const [indexCorrectAnswers, setIndexCorrectAnswers] = useState([]);
-  // useEffect(() => {
-  // console.log("setting on Message", socket._callbacks?.["$message"]);
-  // if (socket._callbacks?.["$message"] == undefined) {
-  socket.on("message", (msg) => {
-    // setMsg(msg);
-    // console.log("this is msg" + msg);
-    let strArr = msg.split(" ");
-    console.log("message ", strArr);
-    if (strArr.length <= 2) {
-      // setResponse(msg.slice(7, msg.length - 1));
-      console.log("msg", msg);
-      setResponse(msg);
-    } else if (strArr.includes("joined")) {
-      setNewUser(msg.split(" ")[0]);
-    } else if (strArr.includes("left")) {
-      setUserLeft("true");
+  useEffect(() => {
+    console.log("setting on Message", socket._callbacks?.["$message"]);
+    if (socket._callbacks?.["$all_submit"] == undefined) {
+      socket.on("all_submit", () => {
+        // console.log("all have submitted");
+        setAllSubmitted(true);
+        console.log("all submitted" + allSubmitted);
+        // setResults(data.split(",").map((el) => el.split(":")));
+      });
     }
+    // if (socket._callbacks?.["$message"] == undefined) {
+    socket.on("message", (msg) => {
+      // setMsg(msg);
+      // console.log("this is msg" + msg);
+      let strArr = msg.split(" ");
+      console.log("message ", strArr);
+      if (strArr.length <= 2) {
+        // setResponse(msg.slice(7, msg.length - 1));
+        console.log("msg", msg);
+        setResponse(msg);
+      } else if (strArr.includes("joined")) {
+        setNewUser(msg.split(" ")[0]);
+      } else if (strArr.includes("left")) {
+        setUserLeft("true");
+      }
 
-    // console.log("all have submitted " + msg);
-    // console.log(strArr[strArr.length - 1].join(""));
-    // const newArr = strArr[1].split(",").map((str) => str.split(":"));
+      // console.log("all have submitted " + msg);
+      // console.log(strArr[strArr.length - 1].join(""));
+      // const newArr = strArr[1].split(",").map((str) => str.split(":"));
 
-    // console.log("newArr: " + newArr);
-    // }
-  });
-  console.log("response", response);
-  // }
-  // }, [joiningQuiz, creatingQuiz]);
-  if (socket._callbacks?.["$all_submit"] == undefined) {
-    socket.on("all_submit", (data) => {
-      console.log("data", data);
-      setResults(data.split(",").map((el) => el.split(":")));
+      // console.log("newArr: " + newArr);
     });
-  }
+    // }
+    console.log("response", response);
+  }, [socket]);
+  // }, [joiningQuiz, creatingQuiz]);
+
+  // if (socket._callbacks?.["$all_submit"] == undefined) {
+  //   socket.on("all_submit", (data) => {
+  //     console.log("all have submitted");
+  //     setResults(data.split(",").map((el) => el.split(":")));
+  //   });
+  // }
   console.log("all submit", socket._callbacks?.["all_submit"]);
   console.log("blank quiz", socket._callbacks?.["$blank_quiz"]);
   if (socket._callbacks?.["$blank_quiz"] == undefined) {
@@ -146,7 +156,7 @@ export default function GenerateQuiz() {
     async function refetch() {
       try {
         if (
-          (response !== undefined || response.split(" ").length >= 2) &&
+          (response !== undefined || response.split(" ").length == 2) &&
           lobbyCodeStr !== undefined
         ) {
           // console.log("this is the lobbyCode " + lobbyCodeStr);
@@ -247,27 +257,44 @@ export default function GenerateQuiz() {
       });
     }
   }
-  // console.log(indexCorrectAnswers);
-  // console.log(answers);
-  // console.log(questions);
-  // console.log(questions[0]);
-  // useEffect(() => {
-  //   async function getUsers() {
-  //     try {
-  //       console.log("updated Lobby code" + lobbyCode);
-  //       if (updatedLobby !== undefined) {
-  //         const resp = await fetch(`http://localhost:5000/users/${lobbyCode}`);
-  //         const users = await resp.json();
-  //         setUsers(users);
-  //       }
-  //     } catch (err) {
-  //       console.log(err);
-  //     }
-  //   }
-  //   getUsers();
-  //   setUpdatedLobby(lobbyCode);
-  //   console.log("updated Lobby code" + lobbyCode);
-  // }, [newUser]);
+  // if (socket._callbacks?.["$all_submit"] == undefined) {
+  //   socket.on("all_submit", () => {
+  //     // console.log("all have submitted");
+  //     setAllSubmitted(true);
+  //     console.log("all submitted" + allSubmitted);
+  //     // setResults(data.split(",").map((el) => el.split(":")));
+  //   });
+  // }
+  useEffect(() => {
+    let lobbyCodeStr = response.split(" ")[1];
+    async function getResults() {
+      try {
+        if (isSubmitted == true) {
+          if (
+            (response !== undefined || response.split(" ").length == 2) &&
+            lobbyCodeStr !== undefined
+          ) {
+            const response = await fetch(
+              `http://localhost:8000/results/${lobbyCodeStr}`
+            );
+            const allresults = await response.json();
+            console.log(allresults);
+            setResults(allresults);
+          } else if (lobbyCode !== undefined) {
+            const response = await fetch(
+              `http://localhost:8000/results/${lobbyCode}`
+            );
+            const allresults = await response.json();
+            console.log(allresults);
+            setResults(allresults);
+          }
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    getResults();
+  }, [isSubmitted, allSubmitted, socket]);
   console.log("this is results ", results);
   console.log(results[0]);
   return (

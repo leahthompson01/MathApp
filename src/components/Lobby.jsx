@@ -105,10 +105,11 @@ export default function Lobby({
     <section className="lobby">
       {message === undefined || usersInLobby.length < 1 ? (
         <div>
-          <p>No Users in Lobby</p>
+          <p className="joinP">Join an Existing Game</p>
+          {/* <p>No Users in Lobby</p> */}
           {/* <p>Click Below to Create New Lobby</p>
           <button onClick={handleClick}>New Lobby</button> */}
-          {/* <p>Join Existing Game</p> */}
+
           <form>
             <label>Username:</label>
             <input
@@ -135,11 +136,13 @@ export default function Lobby({
           {usersInLobby.length > 1 && (
             <section className="users">
               Users in Lobby:{" "}
-              {usersInLobby.map((user) => (
-                <p key={uuid()}>
-                  {user.username !== undefined && user.username.toUpperCase()}
-                </p>
-              ))}
+              <section className="usersNames">
+                {usersInLobby.map((user) => (
+                  <p key={uuid()}>
+                    {user.username !== undefined && user.username.toUpperCase()}
+                  </p>
+                ))}
+              </section>
             </section>
           )}
           <div>

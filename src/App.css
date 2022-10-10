@@ -1,5 +1,5 @@
 :root {
-  --main-bg-color: #d3d3d3;
+  --main-bg-color: #e8e9eb;
   --main-font-color: #c1dbe3;
 }
 * {
@@ -76,7 +76,7 @@ for css */
   padding: 0 1rem;
   margin: 0 auto;
   /* margin-top: 2rem; */
-  justify-content: center;
+  /* justify-content: center; */
   border-radius: 15px;
   align-content: center;
   /* box-shadow: -1em 0 0.4em #c1dbe3, 1em 0 0.4em #c1dbe3; */
@@ -88,6 +88,15 @@ for css */
 }
 .home h1 {
   font-size: 1.7rem;
+  margin-top: 2rem;
+  margin-bottom: 0;
+  padding: 0;
+}
+.studentImg {
+  width: 34%;
+  margin: 0 auto;
+  border-radius: 10px;
+  padding: 0;
 }
 .home h2 {
   font-size: 1.2rem;
@@ -172,7 +181,7 @@ for css */
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 90%;
+  /* width: 90%; */
   margin: 0 auto;
 }
 .questionsContainer h2,
@@ -304,18 +313,22 @@ for css */
 }
 .lobby {
   width: 25%;
+  /* border: 1px solid gray; */
   /* height: calc(100% - 3rem); */
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   text-align: center;
   padding: 1.4rem 1rem;
-  color: var(--main-font-color);
-  background-color: #61787d;
-  /* border-radius: 10px 0 0 10px; */
+  color: black;
+  /* background-color: rgba(193, 219, 227, 0.75); */
+  /* 142, 173, 184, 0.75 */
+  background-color: rgba(142, 173, 184, 0.75);
+  border-radius: 0 7px 7px 0;
 }
 .lobby p {
   width: 100%;
+  font-size: 1.2rem;
 }
 /* .lobby input {
   width: 100%;
@@ -328,17 +341,28 @@ for css */
   flex-direction: column;
   margin: 0 auto;
 }
+.optionsSection label {
+  font-size: 1.4rem;
+}
 
 .lobby input {
   border-radius: 10px;
   width: 90%;
   padding: 0.6rem 0;
   margin: 0.6rem 0;
+  text-align: center;
+  font-size: 1rem;
+}
+.joinP {
+  font-size: 1.4rem;
+  color: black;
 }
 .optionsSection input {
+  text-align: center;
   border-radius: 10px;
   padding: 0.6rem 0;
   margin: 0.6rem 0;
+  font-size: 1rem;
 }
 
 .lobby button {
@@ -375,14 +399,18 @@ for css */
     justify-content: space-between;
     /* height: 100%; */
   }
+  .answerChoices {
+    grid-template-rows: auto;
+  }
   .options {
     margin: 1rem 0;
   }
-  .optionsPage h2 {
-    margin-top: 0.5rem;
+  .optionsPage h2,
+  .quizPage h2 {
+    margin-top: 0.9rem;
     padding: 0;
     line-height: 1.4rem;
-    font-size: 1rem;
+    font-size: 1.3rem;
   }
   /* .optionsSection {
     margin: 0;
@@ -390,6 +418,10 @@ for css */
   } */
   .answerChoices {
     margin: 0;
+  }
+  .optionsSection input {
+    margin: 0.5rem 0;
+    padding: 0;
   }
   .lobby {
     display: flex;
@@ -403,7 +435,7 @@ for css */
   }
   .lobby input {
     width: 65%;
-    padding: 0.2rem 0;
+    padding: 0rem 0;
     margin: 0.3rem 0.6rem;
   }
   /* .lobby input:first-of-type {
@@ -415,6 +447,12 @@ for css */
   }
   .lobby button {
     margin: 0.5rem 0;
+  }
+  .lobby p {
+    font-size: 0.8rem;
+  }
+  .lobby .usersNames {
+    display: flex;
   }
   .navbar ul > li:first-of-type {
     margin-right: 30%;

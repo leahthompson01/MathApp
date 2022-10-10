@@ -13,6 +13,11 @@ export default function Home() {
         src={mathMatchLogo}
       ></img> */}
         <h1>Operation Battles</h1>
+        <img
+          src="/4.png"
+          className="studentImg"
+          alt="students standing around a whiteboard looking at a math equation"
+        ></img>
 
         <h2>
           Battle to see who has the best math skills in Operation Battles!
@@ -21,7 +26,9 @@ export default function Home() {
           A site to improve your math skills, with both single and multiplayer
           quizzes
         </p>
-        <Link to="/MathApp/ChoiceScreen">{<button>Get Started</button>}</Link>
+        <Link to="/MathApp/ChoiceScreen">
+          {<button>Start a New Game</button>}
+        </Link>
       </div>
     </div>
   );
