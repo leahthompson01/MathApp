@@ -10,10 +10,6 @@ export default function Lobby({
   newUser,
   currentUser,
 }) {
-  // console.log("message " + message);
-  // console.log(users)
-  // console.log('current Lobby '+currentLobby)
-  // console.log('new user is '+ newUser)
   const [username, setUsername] = useState("");
   const [usersInLobby, setUsersInLobby] = useState([]);
   const [lobbyCode, setLobbyCode] = useState("");
@@ -34,20 +30,11 @@ export default function Lobby({
       setLobbyCode(message[1]);
     }
   }, [message]);
-  // console.log("there are " + users.length + " users");
-
-  // (message == undefined || message.length < 2)
+ 
   useEffect(() => {
     if (users !== undefined) {
       setUsersInLobby(users);
     }
-    // } else if (
-    //   users !== undefined &&
-    //   message !== "undefined" &&
-    //   message.length >= 2
-    // ) {
-    //   setUsersInLobby((prevArr) => [...prevArr, ...users]);
-    // }
   }, [users]);
   useEffect(() => {
     if (currentUser !== undefined && currentUser !== "") {
@@ -55,7 +42,6 @@ export default function Lobby({
     }
   }, [currentUser]);
 
-  // console.log(usersInLobby);
   useEffect(() => {
     console.log("new user is: " + newUser);
     console.log("Users are: " + users);
@@ -64,7 +50,7 @@ export default function Lobby({
         ...prevArr,
         { username: newUser, quizSubmitted: false },
       ]);
-      // navigate('')
+
     } else if (newUser !== undefined && users[users.length - 1] !== undefined) {
       console.log(users[users.length - 1]);
       setUsersInLobby(users);
@@ -76,8 +62,6 @@ export default function Lobby({
     }
   }, [currentLobby]);
 
-  // console.log(usersInLobby)
-  // console.log(lobbyCode)
   function handleLeave() {
     socket.emit("leave", { username: username, room: lobbyCode });
 
@@ -99,16 +83,11 @@ export default function Lobby({
     });
   }
 
-  // socket.on('message', msg => console.log('this is the msg '+msg))
-  // console.log(message)
   return (
     <section className="lobby">
       {message === undefined || usersInLobby.length < 1 ? (
         <div>
           <p className="joinP">Join an Existing Game</p>
-          {/* <p>No Users in Lobby</p> */}
-          {/* <p>Click Below to Create New Lobby</p>
-          <button onClick={handleClick}>New Lobby</button> */}
 
           <form>
             <label>Username:</label>

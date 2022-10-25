@@ -28,10 +28,8 @@ export default function GenerateQuiz() {
   const [results, setResults] = useState([]);
   const [onMessage, setOnMessage] = useState("");
   const [userLeft, setUserLeft] = useState("false");
-  const [triggeredQuizStart, setTriggeredQuizStart] = useState(false);
   const [indexCorrectAnswers, setIndexCorrectAnswers] = useState([]);
   useEffect(() => {
-    console.log("setting on Message", socket._callbacks?.["$message"]);
     if (socket._callbacks?.["$all_submit"] == undefined) {
       socket.on("all_submit", () => {
         // console.log("all have submitted");
@@ -42,39 +40,20 @@ export default function GenerateQuiz() {
     }
     // if (socket._callbacks?.["$message"] == undefined) {
     socket.on("message", (msg) => {
-      // setMsg(msg);
-      // console.log("this is msg" + msg);
       let strArr = msg.split(" ");
       console.log("message ", strArr);
       if (strArr.length <= 2) {
-        // setResponse(msg.slice(7, msg.length - 1));
-        console.log("msg", msg);
         setResponse(msg);
       } else if (strArr.includes("joined")) {
         setNewUser(msg.split(" ")[0]);
       } else if (strArr.includes("left")) {
         setUserLeft("true");
       }
-
-      // console.log("all have submitted " + msg);
-      // console.log(strArr[strArr.length - 1].join(""));
-      // const newArr = strArr[1].split(",").map((str) => str.split(":"));
-
-      // console.log("newArr: " + newArr);
     });
     // }
     console.log("response", response);
   }, [socket]);
-  // }, [joiningQuiz, creatingQuiz]);
 
-  // if (socket._callbacks?.["$all_submit"] == undefined) {
-  //   socket.on("all_submit", (data) => {
-  //     console.log("all have submitted");
-  //     setResults(data.split(",").map((el) => el.split(":")));
-  //   });
-  // }
-  console.log("all submit", socket._callbacks?.["all_submit"]);
-  console.log("blank quiz", socket._callbacks?.["$blank_quiz"]);
   if (socket._callbacks?.["$blank_quiz"] == undefined) {
     socket.on("blank_quiz", () => {
       socket.emit("quiz_start", {
@@ -83,31 +62,7 @@ export default function GenerateQuiz() {
       });
     });
   }
-  // socket.on("message", (msg) => {
-  //   let strArr = msg.split(" ");
-  //   console.log("message " + msg);
-  //   if (strArr.length <= 2) {
-  //     // setResponse(msg.slice(7, msg.length - 1));
-  //     setResponse(msg);
-  //   } else if (strArr.includes("joined")) {
-  //     setNewUser(msg.split(" ")[0]);
-  //   } else if (strArr.includes("left")) {
-  //     setUserLeft("true");
-  //   } else if (strArr.includes("all")) {
-  //     console.log("all have submitted " + msg);
-  //     console.log(strArr[strArr.length - 1].join(""));
-  //     // const newArr = strArr[1].split(",").map((str) => str.split(":"));
 
-  //     // console.log("newArr: " + newArr);
-  //     // setResults(newArr);
-  //   }
-  // });
-  // console.log("new user? " + newUser);
-  //  console.log('this is response', response)
-  //  console.log('lobby code ' + updatedLobby)
-  //  useEffect(() =>
-  //  setUpdatedLobby(prevValue => response.split('')[1])
-  //  ,[response])
   let url;
   if (joiningQuiz == true) {
     url = `http://localhost:8000/joinquiz/${lobbyCode}`;
@@ -119,10 +74,6 @@ export default function GenerateQuiz() {
       try {
         const resp = await fetch(url);
         const data = await resp.json();
-        // console.log(data)
-        //  console.log( data.forEach(obj => obj = JSON.parse(obj)))
-        // const newData = await data.forEach(obj => console.log(JSON.parse(obj)))
-        // console.log(newData)
         if (url == `http://localhost:8000/joinquiz/${lobbyCode}`) {
           setQuestions(data);
           const resp2 = await fetch(`http://localhost:8000/users/${lobbyCode}`);
@@ -135,12 +86,10 @@ export default function GenerateQuiz() {
             (response !== undefined || response.split(" ").length >= 2) &&
             lobbyCodeStr !== undefined
           ) {
-            // console.log("this is the lobbyCode " + lobbyCodeStr);
             const resp3 = await fetch(
               `http://localhost:8000/users/${lobbyCodeStr}`
             );
             const otherUsers = await resp3.json();
-            // console.log("otherUsers " + otherUsers);
             setUsers(otherUsers);
           }
         }
@@ -159,12 +108,10 @@ export default function GenerateQuiz() {
           (response !== undefined || response.split(" ").length == 2) &&
           lobbyCodeStr !== undefined
         ) {
-          // console.log("this is the lobbyCode " + lobbyCodeStr);
           const resp3 = await fetch(
             `http://localhost:8000/users/${lobbyCodeStr}`
           );
           const otherUsers = await resp3.json();
-          // console.log("otherUsers " + otherUsers);
           setUsers(otherUsers);
         }
       } catch (err) {
@@ -174,28 +121,13 @@ export default function GenerateQuiz() {
     refetch();
   }, [newUser]);
   useEffect(() => {
-    // if (socket._callbacks?.["$all_submit"] == undefined) {
     if (response != " " && response !== undefined && response !== "") {
-      // if (!isSubmitted) {
-      // setTriggeredQuizStart(true);
       socket.emit("quiz_start", {
         msg: response.split(" ")[1],
         quiz: questions,
       });
     }
-    // }
   }, [questions]);
-  // }
-  // }, [questions]);
-  // }, [response, newUser,]);
-  // if (response != " " && response !== undefined && response !== "") {
-  //   if (!isSubmitted) {
-  //     socket.emit("quiz_start", {
-  //       msg: response.split(" ")[1],
-  //       quiz: questions,
-  //     });
-  //   }
-  // }
 
   function decreaseIndex() {
     setIndex((prevIndex) => {
@@ -218,9 +150,7 @@ export default function GenerateQuiz() {
   function selectAnswer(event) {
     if (!isSubmitted) {
       const value = event.target.innerText;
-      // let indx = index
       setAnswers((prevObj) => {
-        // let indx = index
         prevObj[index] = value;
         return {
           ...prevObj,
@@ -239,10 +169,7 @@ export default function GenerateQuiz() {
         setIndexCorrectAnswers((prevArr) => [...prevArr, i]);
       }
     }
-    // console.log(answers);
     setScore(count);
-    // console.log(score);
-    // console.log(count);
     if (lobbyCode !== undefined && lobbyCode !== "") {
       socket.emit("submit_quiz", {
         lobbyCode: lobbyCode,
@@ -257,14 +184,7 @@ export default function GenerateQuiz() {
       });
     }
   }
-  // if (socket._callbacks?.["$all_submit"] == undefined) {
-  //   socket.on("all_submit", () => {
-  //     // console.log("all have submitted");
-  //     setAllSubmitted(true);
-  //     console.log("all submitted" + allSubmitted);
-  //     // setResults(data.split(",").map((el) => el.split(":")));
-  //   });
-  // }
+
   useEffect(() => {
     let lobbyCodeStr = response.split(" ")[1];
     async function getResults() {
@@ -426,14 +346,14 @@ export default function GenerateQuiz() {
             RESULTS
             {results
               .sort((a, b) => a.score - b.score)
-              .map((arr, indx) => (
+              .map((obj, indx) => (
                 <div key={uuid()}>
                   {indx == 0 ? (
-                    <p className="winner">WINNER: {arr[0]}</p>
+                    <p className="winner">WINNER: {results[0].username}</p>
                   ) : (
-                    <p>User: {arr[0]}</p>
+                    <p>User: {obj.username}</p>
                   )}
-                  <p>Score: {arr[1]}</p>
+                  <p>Score: {obj.score}</p>
                 </div>
               ))}
           </div>

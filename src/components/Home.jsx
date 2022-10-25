@@ -7,11 +7,6 @@ export default function Home() {
     <div className="homeContainer">
       <Lobby />
       <div className="home">
-        {/* <img
-        className="mainLogo"
-        alt="two M's with the words Math Matches written in the middle, across the M's"
-        src={mathMatchLogo}
-      ></img> */}
         <h1>Operation Battles</h1>
         <img
           src="/4.png"
